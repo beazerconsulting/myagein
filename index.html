@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milestone Age Calculator — Find the Exact Date You Turn Any Age</title>
+<meta name="description" content="Calculate the exact date and time you turn 1 billion seconds, 10,000 days, 1 million hours old — and every milestone in between.">
+<link rel="canonical" href="https://myagein.com/">
+<meta id="og-title" property="og:title" content="Milestone Age Calculator — Find the Exact Date You Turn Any Age">
+<meta id="og-desc" property="og:description" content="Calculate the exact date and time you turn 1 billion seconds, 10,000 days, 1 million hours old — and every milestone in between.">
+<meta property="og:type" content="website">
+<meta id="og-url" property="og:url" content="https://myagein.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Milestone Age Calculator — Find the Exact Date You Turn Any Age">
+<meta name="twitter:description" content="Find the exact date you turn 1 billion seconds, 10,000 days, or 1 million hours old — and every milestone in between.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Milestone Age Calculator","description":"Calculate the exact date and time you turn 1 billion seconds, 10,000 days, 1 million hours old — and every milestone in between.","url":"https://myagein.com/"}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0F0F11;--surface:#1A1A21;--surface-h:#1F1F28;
+  --border:#2A2A35;--border-l:#3A3A45;
+  --text:#F7F8F8;--text-2:#6B6F7A;--text-3:#4A4A55;
+  --accent:#5E6AD2;--accent-h:#8B8BFF;--accent-dim:rgba(94,106,210,.15);
+  --green:#4CAF82;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',sans-serif;
+  --r:8px;--r-sm:6px;--mw:780px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border-l)}
+.container{max-width:var(--mw);margin:0 auto;padding:0 24px}
+.hidden{display:none!important}
+
+/* ── Header ──────────────────────────────────────── */
+.site-header{
+  padding:72px 0 48px;text-align:center;
+  background:radial-gradient(ellipse 90% 360px at 50% -20px,rgba(94,106,210,.18) 0%,transparent 100%);
+}
+.site-header h1{font-size:2.25rem;font-weight:600;letter-spacing:-.04em;color:var(--text);margin-bottom:12px}
+.hero-sub{font-size:1rem;color:var(--text-2);font-weight:300;max-width:520px;margin:0 auto 20px;letter-spacing:-.01em;line-height:1.7}
+.hero-kws{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.kw-pill{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:12px;color:var(--text-2)}
+
+/* ── Main ────────────────────────────────────────── */
+main{padding:40px 0 80px}
+
+/* ── Cards ───────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:24px}
+.card-title{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.07em;text-transform:uppercase;margin-bottom:16px}
+.section-gap{margin-top:32px}
+
+/* ── Form ────────────────────────────────────────── */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.full{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.03em}
+.field label .opt{font-weight:300;color:var(--text-3);margin-left:4px}
+input[type="date"],input[type="time"],input[type="number"],input[type="text"],select{
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);
+  color:var(--text);font-family:var(--sans);font-size:14px;padding:9px 12px;
+  width:100%;outline:none;transition:border-color .15s,box-shadow .15s;
+  -webkit-appearance:none;appearance:none;
+}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(94,106,210,.18)}
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator{filter:invert(.5);cursor:pointer}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6F7A' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center;padding-right:34px;cursor:pointer;
+}
+.assumed-badge{
+  display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-3);
+  background:rgba(107,111,122,.08);border:1px solid var(--border);border-radius:4px;
+  padding:2px 8px;margin-top:3px;width:fit-content;
+}
+
+/* ── Buttons ─────────────────────────────────────── */
+.btn{
+  background:var(--accent);color:#fff;border:none;border-radius:var(--r-sm);
+  font-family:var(--sans);font-size:14px;font-weight:500;padding:9px 18px;
+  cursor:pointer;letter-spacing:-.01em;transition:background .15s;
+  display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+}
+.btn:hover{background:var(--accent-h)}
+.btn-ghost{
+  background:transparent;color:var(--text-2);border:1px solid var(--border);
+  border-radius:var(--r-sm);font-family:var(--sans);font-size:12px;
+  padding:6px 12px;cursor:pointer;transition:color .15s,border-color .15s;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.btn-ghost:hover{color:var(--text);border-color:var(--border-l)}
+
+/* ── Age grid ────────────────────────────────────── */
+.age-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;margin-bottom:32px;
+}
+.age-cell{background:var(--surface);padding:16px 18px;display:flex;flex-direction:column;gap:3px;transition:background .1s}
+.age-cell:hover{background:var(--surface-h)}
+.age-val{font-family:var(--mono);font-size:1.05rem;font-weight:500;color:var(--text);letter-spacing:-.03em;line-height:1.2}
+.age-unit{font-size:11px;color:var(--text-2);font-weight:400;text-transform:uppercase;letter-spacing:.07em}
+
+/* ── Planet grid ─────────────────────────────────── */
+.planet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:8px}
+.planet-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;transition:border-color .15s}
+.planet-card:hover{border-color:var(--border-l)}
+.planet-sym{font-size:1.4rem;line-height:1;margin-bottom:8px}
+.planet-name{font-size:11px;font-weight:500;color:var(--text-2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.planet-age-val{font-family:var(--mono);font-size:1rem;font-weight:500;color:var(--text);letter-spacing:-.02em;line-height:1.2}
+.planet-bday{font-size:11px;color:var(--text-3);margin-top:5px;line-height:1.4}
+.planet-bday-cd{font-family:var(--mono);color:var(--accent-h)}
+.planet-note{font-size:11px;color:var(--text-3);margin-top:12px;font-style:italic}
+
+/* ── History list ────────────────────────────────── */
+.history-list{
+  display:flex;flex-direction:column;gap:1px;
+  background:var(--border);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;
+}
+.history-item{
+  background:var(--surface);padding:12px 16px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  transition:background .1s;
+}
+.history-item:hover{background:var(--surface-h)}
+.h-left{display:flex;flex-direction:column;gap:2px}
+.h-label{font-size:13px;font-weight:500;color:var(--text);letter-spacing:-.01em}
+.h-date{font-size:11px;color:var(--text-3);font-family:var(--mono)}
+.h-rel{font-size:12px;text-align:right;white-space:nowrap;flex-shrink:0;line-height:1.5}
+.h-rel.before{color:var(--text-3)}
+.h-rel.child{color:var(--text-2)}
+.h-rel.adult{color:var(--accent-h)}
+.h-rel.future{color:var(--text-3);font-style:italic}
+
+/* ── Filter tabs ─────────────────────────────────── */
+.filter-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.filter-tabs{display:flex;gap:5px;flex-wrap:wrap}
+.tab{
+  padding:5px 13px;border-radius:100px;font-size:12px;font-weight:400;
+  cursor:pointer;border:1px solid var(--border);color:var(--text-2);
+  background:transparent;font-family:var(--sans);transition:all .12s;letter-spacing:-.01em;
+}
+.tab:hover{color:var(--text);border-color:var(--border-l)}
+.tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.ms-count{font-size:12px;color:var(--text-3);white-space:nowrap}
+
+/* ── Milestone grid ──────────────────────────────── */
+.ms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
+.ms-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:15px 16px;position:relative;display:flex;flex-direction:column;gap:7px;
+  animation:fadeIn .15s ease;transition:border-color .15s;
+}
+.ms-card:hover{border-color:var(--border-l)}
+.ms-card.upcoming{border-color:rgba(94,106,210,.25)}
+.ms-card.upcoming:hover{border-color:var(--accent)}
+.ms-card.past{opacity:.5}
+.ms-card.highlighted{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.ms-unit{font-size:11px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em}
+.ms-label{font-size:14px;font-weight:500;color:var(--text);letter-spacing:-.02em;line-height:1.25}
+.ms-card.past .ms-label{color:var(--text-3)}
+.ms-date{font-size:12px;color:var(--text-2);font-family:var(--mono)}
+.ms-card.past .ms-date{color:var(--text-3)}
+.ms-countdown{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent-h);letter-spacing:-.02em}
+.ms-ago{font-size:11px;color:var(--text-3)}
+.ms-novelty{
+  display:inline-flex;align-items:center;gap:3px;font-size:10px;
+  color:var(--accent);background:var(--accent-dim);border-radius:3px;
+  padding:1px 6px;width:fit-content;font-weight:500;letter-spacing:.03em;
+}
+.ms-share{
+  position:absolute;top:10px;right:10px;opacity:0;transition:opacity .15s;
+  background:transparent;border:none;cursor:pointer;color:var(--text-3);
+  padding:2px;display:inline-flex;align-items:center;
+}
+.ms-card:hover .ms-share{opacity:1}
+.ms-share:hover{color:var(--accent-h)}
+
+/* ── Manual entry ────────────────────────────────── */
+.manual-row{display:flex;gap:10px;align-items:flex-end}
+.manual-row .field{flex:1}
+.manual-result{margin-top:14px;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);display:none}
+.manual-result.show{display:block}
+.result-dt{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px}
+.result-info{font-size:12px;color:var(--text-2)}
+.result-info.future{color:var(--accent-h)}
+.result-info.past{color:var(--text-3)}
+
+/* ── Shared milestone finder ─────────────────────── */
+.shared-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px}
+.shared-results{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.shared-card{
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--r);
+  padding:14px 16px;display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:12px;transition:border-color .15s;animation:fadeIn .15s ease;
+}
+.shared-card:hover{border-color:var(--border-l)}
+.shared-card.close{border-color:rgba(94,106,210,.3)}
+.shared-card.same-day{border-color:var(--green);background:rgba(76,175,130,.04)}
+.shared-person-tag{font-size:10px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.shared-ms-label{font-size:13px;font-weight:500;color:var(--text);letter-spacing:-.01em;line-height:1.3}
+.shared-ms-date{font-size:11px;color:var(--text-2);font-family:var(--mono);margin-top:2px}
+.shared-gap-col{text-align:center;flex-shrink:0}
+.shared-gap-num{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text-3)}
+.shared-gap-num.green{color:var(--green)}
+.shared-gap-num.accent{color:var(--accent-h)}
+.shared-gap-lbl{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em}
+.shared-empty{text-align:center;padding:40px 24px;color:var(--text-3);font-size:13px}
+.shared-empty p{margin-top:6px;font-size:12px}
+
+/* ── Historic figures ────────────────────────────── */
+.figures-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.figure-item{background:var(--surface);padding:14px 16px;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:14px;transition:background .1s}
+.figure-item:hover{background:var(--surface-h)}
+.figure-age-tag{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:6px 0;text-align:center}
+.figure-item.past .figure-age-tag{color:var(--text-3)}
+.figure-item.future .figure-age-tag{color:var(--accent);border-color:rgba(94,106,210,.4)}
+.figure-item.matching .figure-age-tag{color:#fff;background:var(--accent);border-color:var(--accent)}
+.figure-mid{display:flex;flex-direction:column;gap:2px;min-width:0}
+.figure-name{font-size:13px;font-weight:500;color:var(--text);letter-spacing:-.01em}
+.figure-deed{font-size:12px;color:var(--text-2);font-weight:300;line-height:1.4}
+.figure-item.past .figure-name{color:var(--text-2)}
+.figure-status{font-size:11px;text-align:right;white-space:nowrap;line-height:1.4;flex-shrink:0}
+.figure-status.past{color:var(--text-3)}
+.figure-status.future{color:var(--accent-h)}
+.figure-status.matching{color:var(--green);font-weight:500}
+
+/* ── Animal lifetimes ────────────────────────────── */
+.animal-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.animal-item{background:var(--surface);padding:12px 16px;display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:14px;transition:background .1s}
+.animal-item:hover{background:var(--surface-h)}
+.animal-emoji{font-size:1.4rem;line-height:1;text-align:center}
+.animal-mid{display:flex;flex-direction:column;gap:1px;min-width:0}
+.animal-name{font-size:13px;font-weight:500;color:var(--text);letter-spacing:-.01em}
+.animal-life{font-size:11px;color:var(--text-3);font-family:var(--mono)}
+.animal-right{text-align:right;flex-shrink:0}
+.animal-mult{font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:-.03em;color:var(--text);white-space:nowrap;line-height:1.1}
+.animal-mult.huge{color:var(--accent-h)}
+.animal-mult.fractional{color:var(--text-3)}
+.animal-mult-lbl{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+/* ── FAQ ─────────────────────────────────────────── */
+.faq-section{border-top:1px solid var(--border);padding:64px 0 80px}
+.faq-section>div>h2{font-size:1.4rem;font-weight:600;letter-spacing:-.03em;margin-bottom:28px}
+.faq-item{border-bottom:1px solid var(--border);padding:20px 0}
+.faq-item:last-child{border-bottom:none}
+.faq-item h3{font-size:15px;font-weight:500;letter-spacing:-.02em;margin-bottom:8px}
+.faq-item p{font-size:14px;color:var(--text-2);font-weight:300;line-height:1.75}
+
+/* ── Footer ──────────────────────────────────────── */
+.site-footer{border-top:1px solid var(--border);padding:24px 0;text-align:center;color:var(--text-3);font-size:12px}
+
+/* ── Toast ───────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(16px);
+  background:var(--surface);border:1px solid var(--border-l);
+  border-radius:100px;padding:9px 18px;font-size:13px;color:var(--text);
+  opacity:0;transition:all .2s ease;z-index:999;white-space:nowrap;
+  display:flex;align-items:center;gap:7px;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{text-align:center;padding:48px 24px;color:var(--text-2);grid-column:1/-1;font-size:13px}
+
+/* ── Responsive ──────────────────────────────────── */
+@media(max-width:640px){
+  .site-header h1{font-size:1.75rem}
+  .form-row,.shared-form{grid-template-columns:1fr}
+  .age-grid{grid-template-columns:repeat(2,1fr)}
+  .ms-grid{grid-template-columns:repeat(2,1fr)}
+  .manual-row{flex-direction:column}
+  .manual-row .field:last-of-type{max-width:none!important}
+  .shared-card{grid-template-columns:1fr;gap:8px}
+  .shared-gap-col{text-align:left;padding:4px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+}
+@media(max-width:380px){.ms-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <h1>Milestone Age Calculator</h1>
+    <p class="hero-sub">Find the exact date and time you turn 1&nbsp;billion seconds, 10,000 days, or 1&nbsp;million hours old — and every milestone in between.</p>
+    <div class="hero-kws" aria-label="Topics covered">
+      <span class="kw-pill">age in seconds calculator</span>
+      <span class="kw-pill">how many days old am I</span>
+      <span class="kw-pill">billion seconds birthday</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <!-- ── Calculator form ───────────────────────── -->
+    <section aria-labelledby="calc-heading">
+      <div class="card">
+        <div class="card-title" id="calc-heading">Your Details</div>
+        <div class="form-row">
+          <div class="field">
+            <label for="dob-input">Date of birth</label>
+            <input type="date" id="dob-input" autocomplete="bday" aria-required="true">
+          </div>
+          <div class="field">
+            <label for="time-input">Time of birth <span class="opt">(optional)</span></label>
+            <input type="time" id="time-input" step="1">
+            <span class="assumed-badge hidden" id="assumed-badge" aria-live="polite">
+              <i data-lucide="info" style="width:11px;height:11px"></i>
+              Assuming 12:00:00 PM
+            </span>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="field">
+            <label for="tz-select">Timezone</label>
+            <select id="tz-select" aria-label="Select timezone"></select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Current age ───────────────────────────── -->
+    <section id="age-section" class="hidden" aria-label="Your current age" aria-live="polite">
+      <div class="card-title">You are currently</div>
+      <div class="age-grid" id="age-grid">
+        <div class="age-cell"><span class="age-val" id="age-years">—</span><span class="age-unit">years</span></div>
+        <div class="age-cell"><span class="age-val" id="age-months">—</span><span class="age-unit">months</span></div>
+        <div class="age-cell"><span class="age-val" id="age-weeks">—</span><span class="age-unit">weeks</span></div>
+        <div class="age-cell"><span class="age-val" id="age-days">—</span><span class="age-unit">days</span></div>
+        <div class="age-cell"><span class="age-val" id="age-hours">—</span><span class="age-unit">hours</span></div>
+        <div class="age-cell"><span class="age-val" id="age-minutes">—</span><span class="age-unit">minutes</span></div>
+        <div class="age-cell"><span class="age-val" id="age-seconds">—</span><span class="age-unit">seconds</span></div>
+        <div class="age-cell"><span class="age-val" id="age-beats">—</span><span class="age-unit">heartbeats</span></div>
+      </div>
+    </section>
+
+    <!-- ── Milestones ────────────────────────────── -->
+    <section id="milestones-section" class="hidden" aria-label="Age milestones">
+      <div class="filter-row">
+        <div class="filter-tabs" role="tablist" id="filter-tabs">
+          <button class="tab active" data-filter="all"        role="tab" aria-selected="true">All</button>
+          <button class="tab" data-filter="seconds"           role="tab" aria-selected="false">Seconds</button>
+          <button class="tab" data-filter="minutes"           role="tab" aria-selected="false">Minutes</button>
+          <button class="tab" data-filter="hours"             role="tab" aria-selected="false">Hours</button>
+          <button class="tab" data-filter="days"              role="tab" aria-selected="false">Days</button>
+          <button class="tab" data-filter="weeks"             role="tab" aria-selected="false">Weeks</button>
+          <button class="tab" data-filter="months"            role="tab" aria-selected="false">Months</button>
+          <button class="tab" data-filter="years"             role="tab" aria-selected="false">Years</button>
+          <button class="tab" data-filter="heartbeats"        role="tab" aria-selected="false">Heartbeats</button>
+        </div>
+        <span class="ms-count" id="ms-count" aria-live="polite"></span>
+      </div>
+      <div class="ms-grid" id="ms-grid" role="list"></div>
+    </section>
+
+    <!-- ── Planet ages ───────────────────────────── -->
+    <section id="planet-section" class="hidden section-gap" aria-labelledby="planet-heading">
+      <div class="card-title" id="planet-heading" style="margin-bottom:12px">Your Age on Other Planets</div>
+      <div class="planet-grid" id="planet-grid"></div>
+      <p class="planet-note">Based on each planet's orbital period around the Sun. Earth = 365.25 days.</p>
+    </section>
+
+    <!-- ── Historical context ────────────────────── -->
+    <section id="history-section" class="hidden section-gap" aria-labelledby="history-heading">
+      <div class="card-title" id="history-heading" style="margin-bottom:12px">You and History</div>
+      <div class="history-list" id="history-list"></div>
+    </section>
+
+    <!-- ── Historic figures ──────────────────────── -->
+    <section id="figures-section" class="hidden section-gap" aria-labelledby="figures-heading">
+      <div class="card-title" id="figures-heading" style="margin-bottom:12px">By Your Age...</div>
+      <div class="figures-list" id="figures-list"></div>
+      <p class="planet-note">Notable accomplishments by historic figures, sorted by the age they achieved them.</p>
+    </section>
+
+    <!-- ── Animal lifetimes ──────────────────────── -->
+    <section id="animals-section" class="hidden section-gap" aria-labelledby="animals-heading">
+      <div class="card-title" id="animals-heading" style="margin-bottom:12px">Animal Lifetimes Lived</div>
+      <div class="animal-list" id="animal-list"></div>
+      <p class="planet-note">Based on typical maximum lifespans. Sorted from shortest to longest.</p>
+    </section>
+
+    <!-- ── Manual entry ──────────────────────────── -->
+    <section id="manual-section" class="hidden section-gap" aria-labelledby="manual-heading">
+      <div class="card">
+        <div class="card-title" id="manual-heading">Look up any milestone</div>
+        <div class="manual-row">
+          <div class="field">
+            <label for="manual-val">Number</label>
+            <input type="number" id="manual-val" placeholder="e.g. 1000000000" min="1" step="1">
+          </div>
+          <div class="field" style="max-width:150px">
+            <label for="manual-unit">Unit</label>
+            <select id="manual-unit">
+              <option value="seconds">Seconds</option>
+              <option value="minutes">Minutes</option>
+              <option value="hours">Hours</option>
+              <option value="days">Days</option>
+              <option value="weeks">Weeks</option>
+              <option value="months">Months</option>
+              <option value="years">Years</option>
+              <option value="heartbeats">Heartbeats</option>
+            </select>
+          </div>
+          <button class="btn" id="manual-btn" style="margin-bottom:0">
+            <i data-lucide="calculator" style="width:14px;height:14px"></i>
+            Calculate
+          </button>
+        </div>
+        <div class="manual-result" id="manual-result">
+          <div class="result-dt" id="result-dt"></div>
+          <div class="result-info" id="result-info"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Shared milestone finder ───────────────── -->
+    <section class="section-gap" aria-labelledby="shared-heading">
+      <div class="card">
+        <div class="card-title" id="shared-heading">Shared Milestone Finder</div>
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;font-weight:300">Find dates when two people hit round-number milestones within 30 days of each other — great for couples, siblings, or friends.</p>
+        <div class="shared-form">
+          <div class="field">
+            <label for="shared-name-a">Person A — name <span class="opt">(optional)</span></label>
+            <input type="text" id="shared-name-a" placeholder="e.g. Alex">
+          </div>
+          <div class="field">
+            <label for="shared-name-b">Person B — name <span class="opt">(optional)</span></label>
+            <input type="text" id="shared-name-b" placeholder="e.g. Jordan">
+          </div>
+          <div class="field">
+            <label for="shared-dob-a">Date of birth</label>
+            <input type="date" id="shared-dob-a">
+          </div>
+          <div class="field">
+            <label for="shared-dob-b">Date of birth</label>
+            <input type="date" id="shared-dob-b">
+          </div>
+        </div>
+        <button class="btn" id="shared-btn">
+          <i data-lucide="git-merge" style="width:14px;height:14px"></i>
+          Find Shared Milestones
+        </button>
+        <div class="shared-results hidden" id="shared-results"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ── FAQ ──────────────────────────────────────── -->
+<section class="faq-section" aria-labelledby="faq-heading">
+  <div class="container">
+    <h2 id="faq-heading">Frequently Asked Questions</h2>
+    <article class="faq-item">
+      <h3>How many seconds old am I?</h3>
+      <p>Your age in seconds is the exact number of seconds elapsed since your date and time of birth. A person in their early 30s is roughly 1 billion seconds old. Enter your date of birth above for a live, updating count of your exact age in seconds, minutes, hours, days, weeks, months, years, and heartbeats.</p>
+    </article>
+    <article class="faq-item">
+      <h3>What date will I turn 1 billion seconds old?</h3>
+      <p>One billion seconds equals approximately 31 years and 8 months. Enter your date and time of birth above to find your exact 1-billion-second birthday, complete with a live countdown or the date it already occurred.</p>
+    </article>
+    <article class="faq-item">
+      <h3>How many days old am I today?</h3>
+      <p>The calculator shows your exact age in days, updated every second. Milestones include 10,000 days (about 27.4 years), 5,000 days (about 13.7 years), and 25,000 days (about 68.5 years).</p>
+    </article>
+    <article class="faq-item">
+      <h3>What is the π billion seconds milestone?</h3>
+      <p>Pi (π ≈ 3.14159…) billion seconds equals approximately 99.5 years. The golden ratio (φ ≈ 1.618…) billion seconds is around 51.3 years. Find both in the Seconds tab of the milestone grid.</p>
+    </article>
+    <article class="faq-item">
+      <h3>How old am I on Mars?</h3>
+      <p>A Martian year is 686.97 Earth days — about 1.88 times longer than an Earth year. A 35-year-old on Earth is about 18.6 Mars years old. The Planet Ages section shows your current age on all seven planets, plus a countdown to your next birthday on each one.</p>
+    </article>
+    <article class="faq-item">
+      <h3>Why might my exact milestone date differ from other calculators?</h3>
+      <p>Precision depends on your exact birth time and timezone. Without a time, this calculator defaults to noon (12:00:00 PM) and clearly marks the result as approximate. All arithmetic uses the Luxon library for full timezone-aware, leap-year-correct calculations.</p>
+    </article>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Milestone Age Calculator — All calculations run entirely in your browser. No data is sent to any server.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i data-lucide="check" style="width:13px;height:13px;color:#4CAF82"></i>
+  <span id="toast-msg">Copied to clipboard</span>
+</div>
+
+<script>
+(function () {
+'use strict';
+const { DateTime } = luxon;
+
+// ── Constants ───────────────────────────────────────────────────────────────
+
+const BPM              = 70;
+const BEATS_PER_SEC    = BPM / 60;
+const PHI              = 1.6180339887498948482;
+const SHARED_WINDOW_D  = 30; // days — threshold for "shared" milestone
+
+const PLANETS = [
+  { name:'Mercury', sym:'☿', days:87.97    },
+  { name:'Venus',   sym:'♀', days:224.701  },
+  { name:'Mars',    sym:'♂', days:686.971  },
+  { name:'Jupiter', sym:'♃', days:4332.59  },
+  { name:'Saturn',  sym:'♄', days:10759.22 },
+  { name:'Uranus',  sym:'♅', days:30688.5  },
+  { name:'Neptune', sym:'♆', days:60195.0  },
+];
+
+const EVENTS = [
+  { label:'End of World War II',        iso:'1945-09-02' },
+  { label:'First human in space',       iso:'1961-04-12' },
+  { label:'Moon landing',               iso:'1969-07-20' },
+  { label:'Berlin Wall falls',          iso:'1989-11-09' },
+  { label:'Nelson Mandela freed',       iso:'1990-02-11' },
+  { label:'World Wide Web launched',    iso:'1991-08-06' },
+  { label:'Fall of Soviet Union',       iso:'1991-12-26' },
+  { label:'First Mars rover (Sojourner)',iso:'1997-07-04' },
+  { label:'9/11 attacks',               iso:'2001-09-11' },
+  { label:'Human Genome sequenced',     iso:'2003-04-14' },
+  { label:'First iPhone released',      iso:'2007-06-29' },
+  { label:'COVID-19 pandemic declared', iso:'2020-03-11' },
+  { label:'ChatGPT launched',           iso:'2022-11-30' },
+];
+
+const FIGURES = [
+  { age:12, name:'Mozart',                  deed:'composed his first opera' },
+  { age:13, name:'Anne Frank',              deed:'began writing her diary' },
+  { age:15, name:'Louis Braille',           deed:'invented the braille writing system' },
+  { age:16, name:'Pelé',                    deed:'won his first World Cup' },
+  { age:17, name:'Joan of Arc',             deed:'led the French army to victory at Orléans' },
+  { age:17, name:'Bobby Fischer',           deed:'became the youngest chess grandmaster in history' },
+  { age:17, name:'Malala Yousafzai',        deed:'won the Nobel Peace Prize' },
+  { age:18, name:'Cleopatra',               deed:'became queen of Egypt' },
+  { age:19, name:'Mark Zuckerberg',         deed:'founded Facebook' },
+  { age:21, name:'Steve Jobs',              deed:'co-founded Apple' },
+  { age:22, name:'Larry Page & Sergey Brin',deed:'founded Google' },
+  { age:23, name:'Isaac Newton',            deed:'invented calculus during the plague' },
+  { age:24, name:'Bill Gates',              deed:'had built Microsoft into a leading software company' },
+  { age:25, name:'Alexander the Great',     deed:'had conquered the Persian Empire' },
+  { age:26, name:'Albert Einstein',         deed:'published the theory of special relativity' },
+  { age:26, name:'Nikola Tesla',            deed:'invented the AC induction motor' },
+  { age:27, name:'Walt Disney',             deed:'created Mickey Mouse' },
+  { age:27, name:'Ernest Hemingway',        deed:'published "The Sun Also Rises"' },
+  { age:28, name:'Beethoven',               deed:'had lost most of his hearing' },
+  { age:29, name:'Frida Kahlo',             deed:'painted "The Two Fridas"' },
+  { age:30, name:'Elon Musk',               deed:'founded SpaceX' },
+  { age:31, name:'Marie Curie',             deed:'discovered polonium and radium' },
+  { age:32, name:'J.K. Rowling',            deed:'published the first Harry Potter book' },
+  { age:32, name:'Wilbur Wright',           deed:'made the first powered flight' },
+  { age:34, name:'Martin Luther King Jr.',  deed:'gave the "I Have a Dream" speech' },
+  { age:35, name:'Buddha',                  deed:'achieved enlightenment' },
+  { age:36, name:'Vincent van Gogh',        deed:'painted "The Starry Night"' },
+  { age:39, name:'Neil Armstrong',          deed:'became the first person to walk on the Moon' },
+  { age:41, name:'Maya Angelou',            deed:'published "I Know Why the Caged Bird Sings"' },
+  { age:43, name:'John F. Kennedy',         deed:'became U.S. President' },
+  { age:44, name:'Barack Obama',            deed:'was elected to the U.S. Senate' },
+  { age:46, name:'Stephen Hawking',         deed:'published "A Brief History of Time"' },
+  { age:49, name:'Julius Caesar',           deed:'crossed the Rubicon' },
+  { age:50, name:'Charles Darwin',          deed:'published "On the Origin of Species"' },
+  { age:51, name:'Leonardo da Vinci',       deed:'began painting the Mona Lisa' },
+  { age:52, name:'Abraham Lincoln',         deed:'became U.S. President' },
+  { age:55, name:'Pablo Picasso',           deed:'painted "Guernica"' },
+  { age:56, name:'Henry Ford',              deed:'launched the Model T' },
+  { age:62, name:'Galileo Galilei',         deed:'published his theory of the solar system' },
+  { age:65, name:'Ray Kroc',                deed:'began franchising McDonald\'s' },
+  { age:66, name:'Colonel Sanders',         deed:'started selling Kentucky Fried Chicken' },
+  { age:71, name:'Nelson Mandela',          deed:'was released from prison' },
+  { age:76, name:'Grandma Moses',           deed:'began her career as a painter' },
+  { age:88, name:'Michelangelo',            deed:'was still designing St. Peter\'s Basilica' },
+];
+
+const ANIMALS = [
+  // Microscopic
+  { emoji:'🧫', name:'E. coli bacterium',     days:0.0139 }, // 20 min
+  { emoji:'🦠', name:'Paramecium',            days:1 },
+  { emoji:'🦠', name:'Amoeba',                days:2 },
+  { emoji:'🦠', name:'Tardigrade (active)',   days:90 },
+  // Insects
+  { emoji:'🪰', name:'Mayfly (adult)',        days:1 },
+  { emoji:'🦟', name:'Mosquito',              days:14 },
+  { emoji:'🪰', name:'Housefly',              days:28 },
+  { emoji:'🐝', name:'Worker honeybee',       days:42 },
+  { emoji:'🦋', name:'Monarch butterfly',     days:56 },
+  { emoji:'🐜', name:'Worker ant',            days:90 },
+  { emoji:'🐞', name:'Ladybug',               days:365 },
+  { emoji:'🪳', name:'Cockroach',             days:548 },
+  { emoji:'🕷️', name:'House spider',          days:730 },
+  // Small mammals / rodents
+  { emoji:'🐭', name:'House mouse',           days:730 },
+  { emoji:'🐹', name:'Hamster',               days:1095 },
+  { emoji:'🐀', name:'Rat',                   days:1095 },
+  { emoji:'🐇', name:'Rabbit',                days:3285 },
+  { emoji:'🐿️', name:'Squirrel',              days:4380 },
+  // Fish / amphibians
+  { emoji:'🐠', name:'Goldfish',              days:3650 },
+  { emoji:'🐸', name:'Common frog',           days:3650 },
+  { emoji:'🐙', name:'Octopus',               days:1460 },
+  // Pets
+  { emoji:'🐶', name:'Dog (medium breed)',    days:4380 },
+  { emoji:'🐱', name:'Domestic cat',          days:5475 },
+  // Birds
+  { emoji:'🐦', name:'Sparrow',               days:1095 },
+  { emoji:'🐔', name:'Chicken',               days:2920 },
+  { emoji:'🦅', name:'Bald eagle',            days:7300 },
+  { emoji:'🦜', name:'Macaw parrot',          days:18250 },
+  { emoji:'🦤', name:'Wandering albatross',   days:18250 },
+  // Wild mammals
+  { emoji:'🦌', name:'Deer',                  days:4015 },
+  { emoji:'🐺', name:'Gray wolf',             days:4745 },
+  { emoji:'🦁', name:'Lion',                  days:5110 },
+  { emoji:'🐅', name:'Tiger',                 days:5475 },
+  { emoji:'🐄', name:'Cow',                   days:7300 },
+  { emoji:'🐎', name:'Horse',                 days:9855 },
+  { emoji:'🦒', name:'Giraffe',               days:9125 },
+  { emoji:'🐻', name:'Grizzly bear',          days:9125 },
+  { emoji:'🦍', name:'Gorilla',               days:14600 },
+  { emoji:'🦏', name:'Rhinoceros',            days:14600 },
+  { emoji:'🐬', name:'Bottlenose dolphin',    days:14600 },
+  { emoji:'🐳', name:'Orca',                  days:18250 },
+  { emoji:'🐘', name:'African elephant',      days:25550 },
+  { emoji:'🦣', name:'Bowhead whale',         days:73000 }, // 200 yrs
+  // Reptiles
+  { emoji:'🐊', name:'Saltwater crocodile',   days:25550 },
+  { emoji:'🐢', name:'Galápagos tortoise',    days:54750 }, // 150 yrs
+  // Marine extreme
+  { emoji:'🦈', name:'Greenland shark',       days:146000 }, // 400 yrs
+  // Trees
+  { emoji:'🎋', name:'Bamboo',                days:29200 },
+  { emoji:'🌳', name:'Oak tree',              days:182625 },
+  { emoji:'🌲', name:'Giant sequoia',         days:1095750 }, // 3000 yrs
+  { emoji:'🌲', name:'Bristlecone pine',      days:1826250 }, // 5000 yrs
+];
+
+// ── Milestone definitions ───────────────────────────────────────────────────
+
+const DEFS = [
+  // Seconds
+  { unit:'seconds',    value:1_000,          label:'1,000 seconds' },
+  { unit:'seconds',    value:10_000,         label:'10,000 seconds' },
+  { unit:'seconds',    value:100_000,        label:'100,000 seconds' },
+  { unit:'seconds',    value:1_000_000,      label:'1 million seconds' },
+  { unit:'seconds',    value:10_000_000,     label:'10 million seconds' },
+  { unit:'seconds',    value:100_000_000,    label:'100 million seconds' },
+  { unit:'seconds',    value:1_000_000_000,  label:'1 billion seconds' },
+  { unit:'seconds',    value:1_234_567_890,  label:'1,234,567,890 seconds', novelty:true },
+  { unit:'seconds',    value:PHI * 1e9,      label:'φ × 10⁹ seconds',       novelty:true },
+  { unit:'seconds',    value:Math.PI * 1e9,  label:'π × 10⁹ seconds',       novelty:true },
+  // Minutes
+  { unit:'minutes',    value:1_000,          label:'1,000 minutes' },
+  { unit:'minutes',    value:10_000,         label:'10,000 minutes' },
+  { unit:'minutes',    value:100_000,        label:'100,000 minutes' },
+  { unit:'minutes',    value:1_000_000,      label:'1 million minutes' },
+  { unit:'minutes',    value:10_000_000,     label:'10 million minutes' },
+  { unit:'minutes',    value:50_000_000,     label:'50 million minutes' },
+  // Hours
+  { unit:'hours',      value:1_000,          label:'1,000 hours' },
+  { unit:'hours',      value:10_000,         label:'10,000 hours' },
+  { unit:'hours',      value:100_000,        label:'100,000 hours' },
+  { unit:'hours',      value:500_000,        label:'500,000 hours' },
+  { unit:'hours',      value:1_000_000,      label:'1 million hours' },
+  // Days
+  { unit:'days',       value:1_000,          label:'1,000 days' },
+  { unit:'days',       value:5_000,          label:'5,000 days' },
+  { unit:'days',       value:10_000,         label:'10,000 days' },
+  { unit:'days',       value:25_000,         label:'25,000 days' },
+  { unit:'days',       value:40_000,         label:'40,000 days' },
+  // Weeks
+  { unit:'weeks',      value:100,            label:'100 weeks' },
+  { unit:'weeks',      value:500,            label:'500 weeks' },
+  { unit:'weeks',      value:1_000,          label:'1,000 weeks' },
+  { unit:'weeks',      value:2_500,          label:'2,500 weeks' },
+  { unit:'weeks',      value:5_000,          label:'5,000 weeks' },
+  // Months
+  { unit:'months',     value:6,              label:'6 months' },
+  { unit:'months',     value:12,             label:'12 months' },
+  { unit:'months',     value:24,             label:'24 months' },
+  { unit:'months',     value:100,            label:'100 months' },
+  { unit:'months',     value:500,            label:'500 months' },
+  { unit:'months',     value:1_000,          label:'1,000 months' },
+  // Years
+  { unit:'years',      value:1,              label:'1 year' },
+  { unit:'years',      value:5,              label:'5 years' },
+  { unit:'years',      value:10,             label:'10 years' },
+  { unit:'years',      value:13,             label:'13 years' },
+  { unit:'years',      value:16,             label:'16 years' },
+  { unit:'years',      value:18,             label:'18 years' },
+  { unit:'years',      value:21,             label:'21 years' },
+  { unit:'years',      value:25,             label:'25 years' },
+  { unit:'years',      value:30,             label:'30 years' },
+  { unit:'years',      value:40,             label:'40 years' },
+  { unit:'years',      value:50,             label:'50 years' },
+  { unit:'years',      value:60,             label:'60 years' },
+  { unit:'years',      value:65,             label:'65 years' },
+  { unit:'years',      value:70,             label:'70 years' },
+  { unit:'years',      value:75,             label:'75 years' },
+  { unit:'years',      value:80,             label:'80 years' },
+  { unit:'years',      value:90,             label:'90 years' },
+  { unit:'years',      value:100,            label:'100 years' },
+  { unit:'years',      value:110,            label:'110 years' },
+  // Heartbeats (~70 bpm)
+  { unit:'heartbeats', value:100_000_000,    label:'100 million heartbeats' },
+  { unit:'heartbeats', value:500_000_000,    label:'500 million heartbeats' },
+  { unit:'heartbeats', value:1_000_000_000,  label:'1 billion heartbeats',   novelty:true },
+  { unit:'heartbeats', value:1_500_000_000,  label:'1.5 billion heartbeats' },
+  { unit:'heartbeats', value:2_000_000_000,  label:'2 billion heartbeats' },
+  { unit:'heartbeats', value:2_500_000_000,  label:'2.5 billion heartbeats', novelty:true },
+  { unit:'heartbeats', value:3_000_000_000,  label:'3 billion heartbeats' },
+];
+
+// ── State ───────────────────────────────────────────────────────────────────
+
+const S = {
+  dob: null,
+  timeProvided: false,
+  tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  filter: 'all',
+  highlightId: null,
+  milestones: [],
+  tick: null,
+};
+
+// ── Utilities ───────────────────────────────────────────────────────────────
+
+const $   = id => document.getElementById(id);
+const pad = n  => String(n).padStart(2, '0');
+const fmtN = n => Math.floor(Math.abs(n)).toLocaleString('en-US');
+
+function msId(unit, value) { return `${unit}_${Math.round(value)}`; }
+
+function addToDate(dob, unit, value) {
+  const v = Math.round(value);
+  if (unit === 'heartbeats') return dob.plus({ seconds: Math.round(v / BEATS_PER_SEC) });
+  return dob.plus({ [unit]: v });
+}
+
+function fmtDate(dt) { return dt.toFormat('MMMM d, yyyy'); }
+function fmtFull(dt) { return dt.toFormat("MMMM d, yyyy 'at' h:mm:ss a ZZZZ"); }
+
+function fmtCountdown(ms) {
+  if (ms <= 0) return 'now';
+  const s  = Math.floor(ms / 1000);
+  const d  = Math.floor(s / 86400);
+  const h  = Math.floor((s % 86400) / 3600);
+  const m  = Math.floor((s % 3600) / 60);
+  const sc = s % 60;
+  if (d > 730) { const y = Math.floor(d / 365.25); return `${y}y ${Math.floor(d % 365.25)}d`; }
+  if (d > 0)   return `${d}d ${pad(h)}h ${pad(m)}m ${pad(sc)}s`;
+  if (h > 0)   return `${pad(h)}h ${pad(m)}m ${pad(sc)}s`;
+  return `${pad(m)}m ${pad(sc)}s`;
+}
+
+function fmtAgo(date, now) {
+  const d  = Math.floor((now.toMillis() - date.toMillis()) / 86400000);
+  if (d < 1)   return 'today';
+  if (d < 30)  return `${d} day${d !== 1 ? 's' : ''} ago`;
+  const mo = Math.floor(d / 30.44);
+  if (mo < 12) return `${mo} month${mo !== 1 ? 's' : ''} ago`;
+  const yr = Math.floor(d / 365.25);
+  return `${yr} year${yr !== 1 ? 's' : ''} ago`;
+}
+
+// ── Timezone selector ───────────────────────────────────────────────────────
+
+function populateTZ() {
+  const sel  = $('tz-select');
+  const here = S.tz;
+  const zones = Intl.supportedValuesOf
+    ? Intl.supportedValuesOf('timeZone')
+    : ['UTC','America/New_York','America/Chicago','America/Denver',
+       'America/Los_Angeles','America/Sao_Paulo','Europe/London',
+       'Europe/Paris','Europe/Berlin','Asia/Kolkata','Asia/Tokyo','Australia/Sydney'];
+  const frag = document.createDocumentFragment();
+  [here, ...zones.filter(z => z !== here)].forEach(tz => {
+    const o = document.createElement('option');
+    o.value = tz; o.textContent = tz.replace(/_/g, ' ');
+    if (tz === here) o.selected = true;
+    frag.appendChild(o);
+  });
+  sel.appendChild(frag);
+}
+
+// ── URL handling ────────────────────────────────────────────────────────────
+
+function buildUrl(highlightId) {
+  if (!S.dob) return location.href;
+  const p = new URLSearchParams();
+  p.set('dob', S.dob.toFormat('yyyy-MM-dd'));
+  if (S.timeProvided) { p.set('time', S.dob.toFormat('HH:mm:ss')); p.set('time_type', 'exact'); }
+  else p.set('time_type', 'assumed');
+  const here = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if (S.tz !== here) p.set('tz', S.tz);
+  if (highlightId)   p.set('highlight', highlightId);
+  return `${location.origin}${location.pathname}?${p.toString()}`;
+}
+
+function parseUrl() {
+  const p = new URLSearchParams(location.search);
+  return { dob:p.get('dob'), time:p.get('time'), timeType:p.get('time_type'), tz:p.get('tz'), highlight:p.get('highlight') };
+}
+
+function pushUrl() {
+  if (!S.dob) return;
+  const url = buildUrl(S.highlightId);
+  history.replaceState(null, '', url);
+  $('og-url').content = url;
+  document.querySelector('link[rel=canonical]').href = url;
+}
+
+// ── Core calculations ───────────────────────────────────────────────────────
+
+function buildMilestones(dob) {
+  const cap = dob.plus({ years: 110 });
+  return DEFS
+    .map(d => ({ ...d, date: addToDate(dob, d.unit, d.value), id: msId(d.unit, d.value) }))
+    .filter(m => m.date <= cap)
+    .sort((a, b) => a.date.toMillis() - b.date.toMillis());
+}
+
+function updateAge() {
+  if (!S.dob) return;
+  const now  = DateTime.now().setZone(S.tz);
+  const ms   = now.toMillis() - S.dob.toMillis();
+  const sec  = Math.floor(ms / 1000);
+
+  $('age-seconds').textContent = fmtN(sec);
+  $('age-minutes').textContent = fmtN(ms / 60000);
+  $('age-hours').textContent   = fmtN(ms / 3600000);
+  $('age-days').textContent    = fmtN(ms / 86400000);
+  $('age-weeks').textContent   = fmtN(ms / 604800000);
+  $('age-months').textContent  = fmtN((now.year - S.dob.year) * 12 + (now.month - S.dob.month));
+  $('age-years').textContent   = fmtN(now.diff(S.dob, 'years').years);
+  $('age-beats').textContent   = fmtN(sec * BEATS_PER_SEC);
+}
+
+// ── Planet rendering ────────────────────────────────────────────────────────
+
+function renderPlanets() {
+  if (!S.dob) return;
+  const now     = DateTime.now().setZone(S.tz);
+  const earthD  = (now.toMillis() - S.dob.toMillis()) / 86400000;
+  const grid    = $('planet-grid');
+  grid.innerHTML = '';
+
+  const frag = document.createDocumentFragment();
+  PLANETS.forEach(p => {
+    const ageYrs    = earthD / p.days;
+    const nextBday  = Math.ceil(ageYrs);           // next integer planet-year
+    const nextDate  = S.dob.plus({ days: nextBday * p.days });
+    const msToNext  = nextDate.toMillis() - now.toMillis();
+    const isSoon    = msToNext < 30 * 86400000;
+
+    const card = document.createElement('div');
+    card.className = 'planet-card';
+    card.innerHTML = `
+      <div class="planet-sym">${p.sym}</div>
+      <div class="planet-name">${p.name}</div>
+      <div class="planet-age-val">${ageYrs.toFixed(ageYrs < 10 ? 2 : 1)} yrs</div>
+      <div class="planet-bday">
+        Next birthday<br>
+        <span class="planet-bday-cd ${isSoon ? 'accent' : ''}" data-planet-cd="${nextDate.toMillis()}">
+          ${fmtCountdown(msToNext)}
+        </span>
+      </div>
+    `;
+    frag.appendChild(card);
+  });
+  grid.appendChild(frag);
+}
+
+// ── Historical context ──────────────────────────────────────────────────────
+
+function renderHistory() {
+  if (!S.dob) return;
+  const now  = DateTime.now().setZone(S.tz);
+  const list = $('history-list');
+  list.innerHTML = '';
+
+  const frag = document.createDocumentFragment();
+  EVENTS.forEach(ev => {
+    const evDate = DateTime.fromISO(ev.iso, { zone: S.tz });
+    const diffD  = Math.round((evDate.toMillis() - S.dob.toMillis()) / 86400000);
+    const diffY  = (evDate.toMillis() - S.dob.toMillis()) / (365.25 * 86400000);
+    const isFuture = evDate > now;
+
+    let relHtml, relClass;
+    if (isFuture) {
+      relHtml = `upcoming<br><span style="font-family:var(--mono);color:var(--accent-h)">${fmtCountdown(evDate.toMillis() - now.toMillis())}</span>`;
+      relClass = 'future';
+    } else if (diffD < 0) {
+      // event before birth
+      const absDays = Math.abs(diffD);
+      const absYrs  = Math.abs(diffY);
+      if (absYrs >= 2) relHtml = `${absYrs.toFixed(1)} years<br>before you were born`;
+      else             relHtml = `${absDays.toLocaleString()} days<br>before you were born`;
+      relClass = 'before';
+    } else {
+      // event after birth
+      if (diffY >= 2) relHtml = `you were<br>${diffY.toFixed(1)} years old`;
+      else if (diffD >= 365) relHtml = `you were<br>${diffY.toFixed(1)} years old`;
+      else relHtml = `you were<br>${diffD} days old`;
+      relClass = diffY >= 18 ? 'adult' : 'child';
+    }
+
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.innerHTML = `
+      <div class="h-left">
+        <div class="h-label">${ev.label}</div>
+        <div class="h-date">${evDate.toFormat('MMM d, yyyy')}</div>
+      </div>
+      <div class="h-rel ${relClass}">${relHtml}</div>
+    `;
+    frag.appendChild(item);
+  });
+  list.appendChild(frag);
+}
+
+// ── Historic figures ────────────────────────────────────────────────────────
+
+function renderFigures() {
+  if (!S.dob) return;
+  const now       = DateTime.now().setZone(S.tz);
+  const userYears = now.diff(S.dob, 'years').years;
+  const list      = $('figures-list');
+  list.innerHTML  = '';
+
+  const sorted = [...FIGURES].sort((a, b) => a.age - b.age);
+  const frag   = document.createDocumentFragment();
+
+  sorted.forEach(f => {
+    const diff     = userYears - f.age;
+    const past     = diff >= 0.5;
+    const matching = Math.abs(diff) < 0.5;
+    const future   = diff < -0.5;
+
+    let statusHtml, statusClass;
+    if (matching) {
+      statusHtml  = '✦ right now';
+      statusClass = 'matching';
+    } else if (past) {
+      const yrs = Math.floor(diff);
+      statusHtml = yrs >= 1
+        ? `${yrs} yr${yrs !== 1 ? 's' : ''}<br>past this`
+        : 'recently passed';
+      statusClass = 'past';
+    } else {
+      const yrs = Math.ceil(-diff);
+      statusHtml  = `${yrs} yr${yrs !== 1 ? 's' : ''}<br>to go`;
+      statusClass = 'future';
+    }
+
+    const cls = matching ? 'matching' : past ? 'past' : 'future';
+    const item = document.createElement('div');
+    item.className = `figure-item ${cls}`;
+    item.innerHTML = `
+      <div class="figure-age-tag">${f.age}</div>
+      <div class="figure-mid">
+        <div class="figure-name">${f.name}</div>
+        <div class="figure-deed">${f.deed}</div>
+      </div>
+      <div class="figure-status ${statusClass}">${statusHtml}</div>
+    `;
+    frag.appendChild(item);
+  });
+
+  list.appendChild(frag);
+}
+
+// ── Animal lifetimes ────────────────────────────────────────────────────────
+
+function fmtLifespan(days) {
+  if (days < 1/24)  return `${Math.round(days * 1440)} min`;
+  if (days < 1)     return `${Math.round(days * 24)} hrs`;
+  if (days < 14)    return `${Math.round(days)} day${days !== 1 ? 's' : ''}`;
+  if (days < 90)    return `${Math.round(days / 7)} weeks`;
+  if (days < 730)   return `${Math.round(days / 30.44)} months`;
+  return `${Math.round(days / 365.25)} years`;
+}
+
+function fmtLifetimes(n) {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M×`;
+  if (n >= 10_000)    return `${(n / 1000).toFixed(0)}k×`;
+  if (n >= 1000)      return `${(n / 1000).toFixed(1)}k×`;
+  if (n >= 100)       return `${Math.round(n).toLocaleString()}×`;
+  if (n >= 10)        return `${n.toFixed(1)}×`;
+  if (n >= 1)         return `${n.toFixed(2)}×`;
+  return `${n.toFixed(3)}×`;
+}
+
+function renderAnimals() {
+  if (!S.dob) return;
+  const now      = DateTime.now().setZone(S.tz);
+  const userDays = (now.toMillis() - S.dob.toMillis()) / 86400000;
+  const list     = $('animal-list');
+  list.innerHTML = '';
+
+  const sorted = [...ANIMALS].sort((a, b) => a.days - b.days);
+  const frag   = document.createDocumentFragment();
+
+  sorted.forEach(a => {
+    const lifetimes = userDays / a.days;
+    const cls = lifetimes >= 1000 ? 'huge' : lifetimes < 1 ? 'fractional' : '';
+    const lbl = lifetimes >= 1 ? 'lifetimes' : 'of a lifetime';
+
+    const item = document.createElement('div');
+    item.className = 'animal-item';
+    item.innerHTML = `
+      <div class="animal-emoji">${a.emoji}</div>
+      <div class="animal-mid">
+        <div class="animal-name">${a.name}</div>
+        <div class="animal-life">${fmtLifespan(a.days)} lifespan</div>
+      </div>
+      <div class="animal-right">
+        <div class="animal-mult ${cls}">${fmtLifetimes(lifetimes)}</div>
+        <div class="animal-mult-lbl">${lbl}</div>
+      </div>
+    `;
+    frag.appendChild(item);
+  });
+
+  list.appendChild(frag);
+}
+
+// ── Milestone cards ─────────────────────────────────────────────────────────
+
+const UNIT_SHORT = {
+  seconds:'sec', minutes:'min', hours:'hr', days:'day',
+  weeks:'wk', months:'mo', years:'yr', heartbeats:'bpm',
+};
+
+function makeCard(m, now) {
+  const past = m.date < now;
+  const el   = document.createElement('div');
+  el.className = `ms-card ${past ? 'past' : 'upcoming'}${m.id === S.highlightId ? ' highlighted' : ''}`;
+  el.setAttribute('role', 'listitem');
+  el.dataset.id = m.id;
+
+  el.innerHTML = `
+    <div class="ms-unit">${UNIT_SHORT[m.unit] || m.unit}</div>
+    ${m.novelty ? '<div class="ms-novelty">✦ novelty</div>' : ''}
+    <div class="ms-label">${m.label}</div>
+    <div class="ms-date" title="${fmtFull(m.date)}">${fmtDate(m.date)}</div>
+    ${past
+      ? `<div class="ms-ago">${fmtAgo(m.date, now)}</div>`
+      : `<div class="ms-countdown" data-cd="${m.date.toMillis()}">${fmtCountdown(m.date.toMillis() - now.toMillis())}</div>`}
+    <button class="ms-share" aria-label="Share this milestone" data-msid="${m.id}">
+      <i data-lucide="share-2" style="width:14px;height:14px"></i>
+    </button>
+  `;
+  el.querySelector('.ms-share').addEventListener('click', e => { e.stopPropagation(); doShare(m.id); });
+  return el;
+}
+
+function renderMilestones() {
+  const grid = $('ms-grid');
+  const now  = DateTime.now().setZone(S.tz);
+  const list = S.filter === 'all' ? S.milestones : S.milestones.filter(m => m.unit === S.filter);
+
+  grid.innerHTML = '';
+  if (!list.length) {
+    grid.innerHTML = '<p class="empty">No milestones in this category within the 110-year cap.</p>';
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  list.forEach(m => frag.appendChild(makeCard(m, now)));
+  grid.appendChild(frag);
+  lucide.createIcons();
+
+  const total    = S.milestones.length;
+  const upcoming = S.milestones.filter(m => m.date > now).length;
+  $('ms-count').textContent = `${fmtN(upcoming)} upcoming · ${fmtN(total - upcoming)} past`;
+}
+
+// ── Shared milestone finder ─────────────────────────────────────────────────
+
+function runShared() {
+  const dobStrA = $('shared-dob-a').value;
+  const dobStrB = $('shared-dob-b').value;
+  if (!dobStrA || !dobStrB) { toast('Enter both dates of birth'); return; }
+
+  const nameA = $('shared-name-a').value.trim() || 'Person A';
+  const nameB = $('shared-name-b').value.trim() || 'Person B';
+  const tz    = S.tz || Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const dobA = DateTime.fromISO(`${dobStrA}T12:00:00`, { zone: tz });
+  const dobB = DateTime.fromISO(`${dobStrB}T12:00:00`, { zone: tz });
+  if (!dobA.isValid || !dobB.isValid) { toast('Invalid date'); return; }
+
+  const msA = buildMilestones(dobA);
+  const msB = buildMilestones(dobB);
+
+  const pairs = [];
+  msA.forEach(a => {
+    msB.forEach(b => {
+      const gapD = Math.abs(a.date.toMillis() - b.date.toMillis()) / 86400000;
+      if (gapD <= SHARED_WINDOW_D) pairs.push({ a, b, gapD: Math.round(gapD) });
+    });
+  });
+
+  pairs.sort((x, y) => {
+    // Sort upcoming first, then by closeness
+    const now   = Date.now();
+    const xFut  = x.a.date.toMillis() > now || x.b.date.toMillis() > now;
+    const yFut  = y.a.date.toMillis() > now || y.b.date.toMillis() > now;
+    if (xFut && !yFut) return -1;
+    if (!xFut && yFut) return 1;
+    return x.gapD - y.gapD;
+  });
+
+  const container = $('shared-results');
+  container.innerHTML = '';
+  container.classList.remove('hidden');
+
+  if (!pairs.length) {
+    container.innerHTML = `
+      <div class="shared-empty">
+        <strong>No shared milestones found</strong>
+        <p>No milestones land within ${SHARED_WINDOW_D} days of each other for these two birth dates.</p>
+      </div>`;
+    return;
+  }
+
+  const now  = DateTime.now().setZone(tz);
+  const frag = document.createDocumentFragment();
+
+  pairs.slice(0, 25).forEach(({ a, b, gapD }) => {
+    const isPast = a.date < now && b.date < now;
+    const gapClass = gapD === 0 ? 'green' : gapD <= 7 ? 'accent' : '';
+    const cardClass = gapD === 0 ? 'same-day' : gapD <= 7 ? 'close' : '';
+
+    const card = document.createElement('div');
+    card.className = `shared-card ${cardClass}`;
+    card.innerHTML = `
+      <div class="shared-person">
+        <div class="shared-person-tag">${nameA}</div>
+        <div class="shared-ms-label">${a.label}</div>
+        <div class="shared-ms-date">${fmtDate(a.date)}</div>
+      </div>
+      <div class="shared-gap-col">
+        <div class="shared-gap-num ${gapClass}">${gapD === 0 ? '≡' : gapD}</div>
+        <div class="shared-gap-lbl">${gapD === 0 ? 'same day' : 'days apart'}</div>
+      </div>
+      <div class="shared-person" style="text-align:right">
+        <div class="shared-person-tag">${nameB}</div>
+        <div class="shared-ms-label">${b.label}</div>
+        <div class="shared-ms-date">${fmtDate(b.date)}</div>
+      </div>
+    `;
+    frag.appendChild(card);
+  });
+
+  container.appendChild(frag);
+}
+
+// ── Countdown tick ──────────────────────────────────────────────────────────
+
+function startTick() {
+  stopTick();
+  S.tick = setInterval(() => {
+    updateAge();
+    const nowMs = Date.now();
+    document.querySelectorAll('[data-cd]').forEach(el => {
+      const rem = parseInt(el.dataset.cd) - nowMs;
+      el.textContent = fmtCountdown(rem);
+      if (rem <= 0) {
+        const card = el.closest('.ms-card');
+        if (card) { card.classList.replace('upcoming', 'past'); el.outerHTML = `<div class="ms-ago">just now</div>`; }
+      }
+    });
+    document.querySelectorAll('[data-planet-cd]').forEach(el => {
+      const rem = parseInt(el.dataset.planetCd) - nowMs;
+      el.textContent = fmtCountdown(rem);
+    });
+  }, 1000);
+}
+
+function stopTick() { if (S.tick) { clearInterval(S.tick); S.tick = null; } }
+
+// ── Share / toast ───────────────────────────────────────────────────────────
+
+async function doShare(id) {
+  S.highlightId = id;
+  const url = buildUrl(id);
+  history.replaceState(null, '', url);
+  try { await navigator.clipboard.writeText(url); toast('Link copied to clipboard'); }
+  catch { prompt('Copy this link:', url); }
+}
+
+function toast(msg) {
+  $('toast-msg').textContent = msg;
+  const el = $('toast');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+// ── Manual entry ────────────────────────────────────────────────────────────
+
+function calcManual() {
+  const raw  = parseFloat($('manual-val').value);
+  const unit = $('manual-unit').value;
+  if (!S.dob || isNaN(raw) || raw <= 0) return;
+  const date = addToDate(S.dob, unit, raw);
+  const now  = DateTime.now().setZone(S.tz);
+  const past = date < now;
+  $('result-dt').textContent = fmtFull(date);
+  const info = $('result-info');
+  if (past) { info.textContent = `Occurred ${fmtAgo(date, now)}`; info.className = 'result-info past'; }
+  else { info.textContent = `In ${fmtCountdown(date.toMillis() - now.toMillis())}`; info.className = 'result-info future'; }
+  $('manual-result').classList.add('show');
+}
+
+// ── Apply DOB ───────────────────────────────────────────────────────────────
+
+function applyDOB(dobStr, timeStr, timeType, tz) {
+  if (tz) S.tz = tz;
+  const ts = (timeStr && timeType === 'exact') ? timeStr : '12:00:00';
+  const dob = DateTime.fromISO(`${dobStr}T${ts}`, { zone: S.tz });
+  if (!dob.isValid) return;
+
+  S.dob          = dob;
+  S.timeProvided = !!(timeStr && timeType === 'exact');
+  S.milestones   = buildMilestones(dob);
+
+  $('assumed-badge').classList.toggle('hidden', S.timeProvided);
+  ['age-section','milestones-section','planet-section','history-section','figures-section','animals-section','manual-section']
+    .forEach(id => $(id).classList.remove('hidden'));
+
+  updateAge();
+  renderMilestones();
+  renderPlanets();
+  renderHistory();
+  renderFigures();
+  renderAnimals();
+  startTick();
+  pushUrl();
+
+  if (S.highlightId) {
+    setTimeout(() => {
+      const el = document.querySelector(`[data-id="${S.highlightId}"]`);
+      if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 400);
+  }
+}
+
+// ── Init ────────────────────────────────────────────────────────────────────
+
+function init() {
+  populateTZ();
+  lucide.createIcons();
+  $('dob-input').max = DateTime.now().toFormat('yyyy-MM-dd');
+  $('shared-dob-a').max = $('shared-dob-b').max = DateTime.now().toFormat('yyyy-MM-dd');
+
+  function recalc() {
+    const dob  = $('dob-input').value;
+    const time = $('time-input').value;
+    const tz   = $('tz-select').value;
+    if (dob) applyDOB(dob, time || null, time ? 'exact' : 'assumed', tz);
+  }
+
+  $('dob-input').addEventListener('change', recalc);
+  $('time-input').addEventListener('change', recalc);
+  $('tz-select').addEventListener('change', () => { S.tz = $('tz-select').value; recalc(); });
+
+  $('filter-tabs').addEventListener('click', e => {
+    const tab = e.target.closest('.tab');
+    if (!tab) return;
+    document.querySelectorAll('#filter-tabs .tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+    tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+    S.filter = tab.dataset.filter;
+    renderMilestones();
+  });
+
+  $('manual-btn').addEventListener('click', calcManual);
+  $('manual-val').addEventListener('keydown', e => { if (e.key === 'Enter') calcManual(); });
+  $('shared-btn').addEventListener('click', runShared);
+
+  // Pre-populate from URL
+  const { dob, time, timeType, tz, highlight } = parseUrl();
+  if (dob) {
+    $('dob-input').value = dob;
+    if (time && timeType === 'exact') $('time-input').value = time;
+    if (tz) { const opt = Array.from($('tz-select').options).find(o => o.value === tz); if (opt) opt.selected = true; }
+    S.highlightId = highlight;
+    applyDOB(dob, (time && timeType === 'exact') ? time : null, timeType || 'assumed', tz);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
