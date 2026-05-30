@@ -1,0 +1,10 @@
+{
+  "appId": "com.myagein.app",
+  "appName": "My Age In",
+  "webDir": "www",
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#5e6ad2"
+    }
+  }
+}

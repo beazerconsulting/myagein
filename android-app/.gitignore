@@ -1,0 +1,15 @@
+# Dependencies — restored with `npm install`
+node_modules/
+
+# Capacitor / native build outputs
+android/app/build/
+android/build/
+android/.gradle/
+android/captures/
+android/local.properties
+*.apk
+*.aab
+*.keystore
+
+# OS / editor cruft
+.DS_Store
