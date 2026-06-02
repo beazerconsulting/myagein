@@ -67,6 +67,9 @@ main{padding:40px 0 80px}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.03em}
 .field label .opt{font-weight:300;color:var(--text-3);margin-left:4px}
+.dob-row{display:flex;gap:8px}
+.dob-row input[type="date"]{flex:1;min-width:0}
+.dob-row select{width:104px;flex-shrink:0}
 input[type="date"],input[type="time"],input[type="number"],input[type="text"],select{
   background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);
   color:var(--text);font-family:var(--sans);font-size:14px;padding:9px 12px;
@@ -319,7 +322,10 @@ select{
         <div class="form-row">
           <div class="field">
             <label for="dob-input">Date of birth</label>
-            <input type="date" id="dob-input" autocomplete="bday" aria-required="true">
+            <div class="dob-row">
+              <input type="date" id="dob-input" autocomplete="bday" aria-required="true">
+              <select id="dob-year" aria-label="Quick-select birth year" title="Jump to a birth year"></select>
+            </div>
           </div>
           <div class="field">
             <label for="time-input">Time of birth <span class="opt">(optional)</span></label>
@@ -1260,6 +1266,24 @@ function init() {
   $('dob-input').max = DateTime.now().toFormat('yyyy-MM-dd');
   $('shared-dob-a').max = $('shared-dob-b').max = DateTime.now().toFormat('yyyy-MM-dd');
 
+  // Year quick-select — far easier than clicking through the native date picker.
+  const nowYear = DateTime.now().year;
+  const yearSel = $('dob-year');
+  const yph = document.createElement('option');
+  yph.value = ''; yph.textContent = 'Year'; yph.disabled = true; yph.selected = true;
+  yearSel.appendChild(yph);
+  for (let y = nowYear; y >= 1900; y--) {
+    const o = document.createElement('option');
+    o.value = String(y); o.textContent = String(y);
+    yearSel.appendChild(o);
+  }
+
+  // Keep the year dropdown in sync with whatever the date input shows.
+  function syncYearSelect() {
+    const v = $('dob-input').value;
+    yearSel.value = v ? v.slice(0, 4) : '';
+  }
+
   function recalc() {
     const dob  = $('dob-input').value;
     const time = $('time-input').value;
@@ -1267,6 +1291,20 @@ function init() {
     if (dob) applyDOB(dob, time || null, time ? 'exact' : 'assumed', tz);
   }
 
+  // Picking a year sets the date input's year, preserving the existing month/day
+  // (defaulting to Jan 1 if no date chosen yet), then recalculates.
+  yearSel.addEventListener('change', () => {
+    const y = yearSel.value;
+    if (!y) return;
+    const cur = $('dob-input').value;
+    const md  = cur ? cur.slice(4) : '-01-01';
+    let next  = y + md;
+    if (next > $('dob-input').max) next = $('dob-input').max; // clamp to today
+    $('dob-input').value = next;
+    recalc();
+  });
+
+  $('dob-input').addEventListener('change', syncYearSelect);
   $('dob-input').addEventListener('change', recalc);
   $('time-input').addEventListener('change', recalc);
   $('tz-select').addEventListener('change', () => { S.tz = $('tz-select').value; recalc(); });
@@ -1288,6 +1326,7 @@ function init() {
   const { dob, time, timeType, tz, highlight } = parseUrl();
   if (dob) {
     $('dob-input').value = dob;
+    syncYearSelect();
     if (time && timeType === 'exact') $('time-input').value = time;
     if (tz) { const opt = Array.from($('tz-select').options).find(o => o.value === tz); if (opt) opt.selected = true; }
     S.highlightId = highlight;
