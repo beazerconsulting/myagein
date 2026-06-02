@@ -41,14 +41,37 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 
 /* ── Header ──────────────────────────────────────── */
 .site-header{
-  padding:72px 0 48px;text-align:center;
+  padding:84px 0 52px;text-align:center;position:relative;overflow:hidden;
   background:
-    radial-gradient(ellipse 70% 280px at 50% 0px,rgba(94,106,210,.32) 0%,transparent 100%),
-    radial-gradient(ellipse 40% 160px at 50% 0px,rgba(139,139,255,.14) 0%,transparent 100%);
+    radial-gradient(ellipse 70% 300px at 50% 0,rgba(167,139,250,.12) 0%,transparent 70%),
+    radial-gradient(ellipse 90% 420px at 50% -40px,rgba(94,106,210,.30) 0%,transparent 70%);
 }
-.site-header h1{font-size:2.25rem;font-weight:600;letter-spacing:-.04em;margin-bottom:12px;
-  background:linear-gradient(135deg,#fff 30%,var(--accent-h) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.site-header::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(94,106,210,.18) 1px,transparent 1px);
+  background-size:26px 26px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 80% at 50% 30%,#000 0%,transparent 75%);
+          mask-image:radial-gradient(ellipse 70% 80% at 50% 30%,#000 0%,transparent 75%);
+  opacity:.5;
+}
+.site-header>.container{position:relative;z-index:1}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--accent-h);
+  background:var(--accent-dim);border:1px solid rgba(94,106,210,.35);
+  border-radius:100px;padding:6px 14px;margin-bottom:22px;
+  box-shadow:0 0 24px -6px rgba(94,106,210,.4);
+}
+.hero-eyebrow i{width:13px;height:13px}
+.site-header h1{font-size:3.5rem;font-weight:600;letter-spacing:-.045em;line-height:1.04;margin-bottom:12px}
+.hero-title-grad{
+  background:linear-gradient(100deg,#A78BFA 0%,#8B8BFF 35%,#5E6AD2 70%,#8B8BFF 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 4px 28px rgba(94,106,210,.45));
+  animation:heroShimmer 7s linear infinite;
+}
+@keyframes heroShimmer{to{background-position:200% center}}
 .hero-sub{font-size:1rem;color:var(--text-2);font-weight:300;max-width:520px;margin:0 auto 20px;letter-spacing:-.01em;line-height:1.7}
 .hero-kws{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .kw-pill{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:12px;color:var(--text-2)}
@@ -57,8 +80,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 main{padding:40px 0 80px}
 
 /* ── Cards ───────────────────────────────────────── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:24px}
-.card-title{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.07em;text-transform:uppercase;margin-bottom:16px}
+.card{
+  background:linear-gradient(180deg,rgba(94,106,210,.04) 0%,transparent 120px),var(--surface);
+  border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:24px;
+  position:relative;transition:border-color .2s,box-shadow .2s,transform .2s;
+}
+.card:hover{border-color:var(--border-l);transform:translateY(-1px);box-shadow:0 14px 40px -20px rgba(94,106,210,.45)}
+.card-title{
+  font-size:12px;font-weight:600;color:var(--text);letter-spacing:.07em;text-transform:uppercase;
+  margin-bottom:16px;display:flex;align-items:center;gap:9px;
+}
+.card-title::before{
+  content:"";width:3px;height:14px;border-radius:2px;flex-shrink:0;
+  background:linear-gradient(180deg,var(--accent-h),var(--accent));
+  box-shadow:0 0 10px rgba(94,106,210,.6);
+}
 .section-gap{margin-top:32px}
 
 /* ── Form ────────────────────────────────────────── */
@@ -113,13 +149,21 @@ select{
 /* ── Age grid ────────────────────────────────────── */
 .age-grid{
   display:grid;grid-template-columns:repeat(4,1fr);
-  gap:1px;background:var(--border);border:1px solid var(--border);
+  gap:1px;background:var(--border);border:1px solid var(--border-l);
   border-radius:var(--r);overflow:hidden;margin-bottom:32px;
+  box-shadow:0 0 0 1px rgba(94,106,210,.08),0 18px 50px -28px rgba(94,106,210,.5);
 }
-.age-cell{background:var(--surface);padding:16px 18px;display:flex;flex-direction:column;gap:3px;transition:background .15s,box-shadow .15s}
-.age-cell:hover{background:var(--surface-h);box-shadow:inset 0 -2px 0 var(--accent)}
-.age-val{font-family:var(--mono);font-size:1.05rem;font-weight:500;color:var(--text);letter-spacing:-.03em;line-height:1.2}
-.age-unit{font-size:11px;color:var(--text-2);font-weight:400;text-transform:uppercase;letter-spacing:.07em}
+.age-cell{
+  background:linear-gradient(160deg,rgba(94,106,210,.05),transparent 60%),var(--surface);
+  padding:17px 18px;display:flex;flex-direction:column;gap:3px;transition:background .15s,box-shadow .15s;
+}
+.age-cell:hover{background:linear-gradient(160deg,rgba(94,106,210,.14),transparent 70%),var(--surface-h);box-shadow:inset 0 -2px 0 var(--accent)}
+.age-val{
+  font-family:var(--mono);font-size:1.1rem;font-weight:500;letter-spacing:-.03em;line-height:1.2;
+  background:linear-gradient(180deg,#fff,#C5C8FF);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+}
+.age-unit{font-size:11px;color:var(--text-2);font-weight:500;text-transform:uppercase;letter-spacing:.07em}
 
 /* ── Planet grid ─────────────────────────────────── */
 .planet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:8px}
@@ -180,13 +224,16 @@ select{
 .ms-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
   padding:15px 16px;position:relative;display:flex;flex-direction:column;gap:7px;
-  animation:fadeIn .15s ease;transition:border-color .15s;
+  animation:fadeIn .15s ease;transition:border-color .15s,box-shadow .15s,transform .15s;
 }
-.ms-card:hover{border-color:var(--border-l)}
-.ms-card.upcoming{border-color:rgba(94,106,210,.3);border-top:2px solid rgba(94,106,210,.5)}
-.ms-card.upcoming:hover{border-color:var(--accent)}
+.ms-card:hover{border-color:var(--border-l);transform:translateY(-2px);box-shadow:0 12px 30px -18px rgba(94,106,210,.5)}
+.ms-card.upcoming{
+  border-color:rgba(94,106,210,.3);border-top:2px solid rgba(94,106,210,.5);
+  background:linear-gradient(165deg,rgba(94,106,210,.07),transparent 55%),var(--surface);
+}
+.ms-card.upcoming:hover{border-color:var(--accent);box-shadow:0 12px 34px -16px rgba(94,106,210,.65)}
 .ms-card.past{opacity:.5}
-.ms-card.highlighted{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.ms-card.highlighted{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 30px -8px rgba(94,106,210,.7)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 .ms-unit{font-size:11px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em}
 .ms-label{font-size:14px;font-weight:500;color:var(--text);letter-spacing:-.02em;line-height:1.25}
@@ -297,7 +344,7 @@ select{
 
 /* ── Responsive ──────────────────────────────────── */
 @media(max-width:640px){
-  .site-header h1{font-size:1.75rem}
+  .site-header h1{font-size:2.2rem}
   .form-row,.shared-form{grid-template-columns:1fr}
   .age-grid{grid-template-columns:repeat(2,1fr)}
   .ms-grid{grid-template-columns:repeat(2,1fr)}
@@ -313,7 +360,8 @@ select{
 
 <header class="site-header">
   <div class="container">
-    <h1>Milestone Age Calculator</h1>
+    <span class="hero-eyebrow"><i data-lucide="hourglass"></i> Your life, measured in milestones</span>
+    <h1><span class="hero-title-grad">Milestone Age</span> Calculator</h1>
   </div>
 </header>
 
