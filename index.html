@@ -68,8 +68,10 @@ main{padding:40px 0 80px}
 .field label{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.03em}
 .field label .opt{font-weight:300;color:var(--text-3);margin-left:4px}
 .dob-row{display:flex;gap:8px}
-.dob-row input[type="date"]{flex:1;min-width:0}
-.dob-row select{width:104px;flex-shrink:0}
+.dob-row select{min-width:0;text-align:center;text-align-last:center}
+.dob-row #dob-month{flex:1.4}
+.dob-row #dob-day{flex:.8}
+.dob-row #dob-year{flex:1}
 .time-row{display:flex;align-items:center;gap:6px}
 .time-row select{flex:1;min-width:0;text-align:center;text-align-last:center}
 .time-row .time-colon{color:var(--text-3);font-weight:600}
@@ -324,10 +326,11 @@ select{
         <div class="card-title" id="calc-heading">Your Details</div>
         <div class="form-row">
           <div class="field">
-            <label for="dob-input">Date of birth</label>
+            <label for="dob-month">Date of birth</label>
             <div class="dob-row">
-              <input type="date" id="dob-input" autocomplete="bday" aria-required="true">
-              <select id="dob-year" aria-label="Quick-select birth year" title="Jump to a birth year"></select>
+              <select id="dob-month" aria-label="Birth month" title="Month"></select>
+              <select id="dob-day" aria-label="Birth day" title="Day"></select>
+              <select id="dob-year" aria-label="Birth year" title="Year"></select>
             </div>
           </div>
           <div class="field">
@@ -1304,25 +1307,64 @@ function applyDOB(dobStr, timeStr, timeType, tz) {
 function init() {
   populateTZ();
   lucide.createIcons();
-  $('dob-input').max = DateTime.now().toFormat('yyyy-MM-dd');
   $('shared-dob-a').max = $('shared-dob-b').max = DateTime.now().toFormat('yyyy-MM-dd');
 
-  // Year quick-select — far easier than clicking through the native date picker.
+  // ── Date selector (month / day / year dropdowns) ──
+  // Three plain dropdowns are far more intuitive than the native date picker,
+  // and consistent with the time selector below.
+  const MONTHS = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
   const nowYear = DateTime.now().year;
-  const yearSel = $('dob-year');
-  const yph = document.createElement('option');
-  yph.value = ''; yph.textContent = 'Year'; yph.disabled = true; yph.selected = true;
-  yearSel.appendChild(yph);
-  for (let y = nowYear; y >= 1900; y--) {
+  const monthSel = $('dob-month'), daySel = $('dob-day'), yearSel = $('dob-year');
+
+  function placeholder(text) {
     const o = document.createElement('option');
-    o.value = String(y); o.textContent = String(y);
-    yearSel.appendChild(o);
+    o.value = ''; o.textContent = text; o.disabled = true; o.selected = true;
+    return o;
+  }
+  function addOption(sel, value, label) {
+    const o = document.createElement('option');
+    o.value = String(value); o.textContent = label;
+    sel.appendChild(o);
   }
 
-  // Keep the year dropdown in sync with whatever the date input shows.
-  function syncYearSelect() {
-    const v = $('dob-input').value;
-    yearSel.value = v ? v.slice(0, 4) : '';
+  monthSel.appendChild(placeholder('Month'));
+  MONTHS.forEach((name, i) => addOption(monthSel, i + 1, name));
+  yearSel.appendChild(placeholder('Year'));
+  for (let y = nowYear; y >= 1900; y--) addOption(yearSel, y, y);
+
+  // Rebuild the day list to match the chosen month/year (28–31 days), keeping
+  // the current selection if it's still valid.
+  function rebuildDays() {
+    const m = parseInt(monthSel.value, 10);
+    const y = parseInt(yearSel.value, 10);
+    const prev = daySel.value;
+    const count = (m && y) ? DateTime.local(y, m).daysInMonth
+                : m ? DateTime.local(2000, m).daysInMonth : 31;
+    daySel.innerHTML = '';
+    daySel.appendChild(placeholder('Day'));
+    for (let d = 1; d <= count; d++) addOption(daySel, d, d);
+    if (prev && parseInt(prev, 10) <= count) daySel.value = prev;
+  }
+  rebuildDays();
+
+  // Returns a valid "yyyy-MM-dd" string, or '' if incomplete or in the future.
+  function getDateValue() {
+    const m = monthSel.value, d = daySel.value, y = yearSel.value;
+    if (!m || !d || !y) return '';
+    const dt = DateTime.local(+y, +m, +d);
+    if (!dt.isValid || dt > DateTime.now().endOf('day')) return '';
+    return dt.toFormat('yyyy-MM-dd');
+  }
+
+  // Populates the three selectors from a "yyyy-MM-dd" string.
+  function setDateSelectors(ymd) {
+    if (!ymd) return;
+    const [y, m, d] = ymd.split('-');
+    yearSel.value  = String(+y);
+    monthSel.value = String(+m);
+    rebuildDays();
+    daySel.value   = String(+d);
   }
 
   // ── Clock selector (hour / minute / AM-PM) ──
@@ -1366,27 +1408,15 @@ function init() {
   }
 
   function recalc() {
-    const dob  = $('dob-input').value;
+    const dob  = getDateValue();
     const time = getTimeValue();
     const tz   = $('tz-select').value;
     if (dob) applyDOB(dob, time || null, time ? 'exact' : 'assumed', tz);
   }
 
-  // Picking a year sets the date input's year, preserving the existing month/day
-  // (defaulting to Jan 1 if no date chosen yet), then recalculates.
-  yearSel.addEventListener('change', () => {
-    const y = yearSel.value;
-    if (!y) return;
-    const cur = $('dob-input').value;
-    const md  = cur ? cur.slice(4) : '-01-01';
-    let next  = y + md;
-    if (next > $('dob-input').max) next = $('dob-input').max; // clamp to today
-    $('dob-input').value = next;
-    recalc();
-  });
-
-  $('dob-input').addEventListener('change', syncYearSelect);
-  $('dob-input').addEventListener('change', recalc);
+  // Month/year changes can alter how many days exist, so rebuild before calc.
+  [monthSel, yearSel].forEach(el => el.addEventListener('change', () => { rebuildDays(); recalc(); }));
+  daySel.addEventListener('change', recalc);
   [hourSel, minSel, ampmSel].forEach(el => el.addEventListener('change', recalc));
   $('tz-select').addEventListener('change', () => { S.tz = $('tz-select').value; recalc(); });
 
@@ -1406,8 +1436,7 @@ function init() {
   // Pre-populate from URL
   const { dob, time, timeType, tz, highlight } = parseUrl();
   if (dob) {
-    $('dob-input').value = dob;
-    syncYearSelect();
+    setDateSelectors(dob);
     if (time && timeType === 'exact') setTimeSelectors(time);
     if (tz) { const opt = Array.from($('tz-select').options).find(o => o.value === tz); if (opt) opt.selected = true; }
     S.highlightId = highlight;
