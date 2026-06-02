@@ -1480,17 +1480,73 @@ document.addEventListener('DOMContentLoaded', init);
         .replace(/"/g,'&quot;');
     }
 
-    function headerRow(cells) {
-      return '<Row>' + cells.map(c =>
-        `<Cell ss:StyleID="header"><Data ss:Type="String">${esc(c)}</Data></Cell>`
-      ).join('') + '</Row>';
-    }
+    const cell = (txt, style) =>
+      `<Cell${style ? ` ss:StyleID="${style}"` : ''}><Data ss:Type="String">${esc(txt)}</Data></Cell>`;
 
-    function dataRow(cells) {
-      return '<Row>' + cells.map(c =>
-        `<Cell><Data ss:Type="String">${esc(c)}</Data></Cell>`
-      ).join('') + '</Row>';
-    }
+    // Each data row picks styles by parity (for striping) and by status.
+    const dataRows = rows.map((r, i) => {
+      const p    = i % 2;                       // 0 = darker, 1 = lighter stripe
+      const isUp = r[4] === 'Upcoming';
+      const cells = [
+        cell(r[0], `label${p}`),                // Milestone (accent, bold)
+        cell(r[1], `unit${p}`),                 // Unit (violet)
+        cell(r[2], `data${p}`),                 // Date
+        cell(r[3], `data${p}`),                 // Time
+        cell(r[4], (isUp ? 'up' : 'past') + p), // Status (colour-coded)
+        cell(r[5], `data${p}`),                 // Relative
+      ].join('');
+      return `<Row ss:Height="22">${cells}</Row>`;
+    }).join('\n  ');
+
+    // ── Style palette: dark base + violet accents ──
+    const C = {
+      titleBg:'#0F0F11', titleTx:'#8B8BFF',
+      metaBg:'#15151B',  metaTx:'#8A8D98',
+      headBg:'#5E6AD2',  headTx:'#FFFFFF',
+      rowA:'#16161D',    rowB:'#1E1E28',        // alternating stripes
+      text:'#E8E9ED',    accent:'#8B8BFF',      muted:'#6B6F7A',
+      border:'#2A2A35',
+    };
+    const border =
+      `<Borders>` +
+      `<Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="${C.border}"/>` +
+      `<Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="${C.border}"/>` +
+      `</Borders>`;
+    const fill = c => `<Interior ss:Color="${c}" ss:Pattern="Solid"/>`;
+    const font = (c, opts = '') => `<Font ss:FontName="Calibri" ss:Size="11" ss:Color="${c}"${opts}/>`;
+    const alignL = `<Alignment ss:Vertical="Center" ss:Horizontal="Left"/>`;
+    const alignC = `<Alignment ss:Vertical="Center" ss:Horizontal="Center"/>`;
+
+    const dataStyle = (id, bg, fnt, align = alignL) =>
+      `<Style ss:ID="${id}">${align}${fnt}${fill(bg)}${border}</Style>`;
+
+    const styles = [
+      // Title + meta
+      `<Style ss:ID="title"><Alignment ss:Vertical="Center" ss:Horizontal="Left"/>` +
+        `<Font ss:FontName="Calibri" ss:Size="20" ss:Bold="1" ss:Color="${C.titleTx}"/>${fill(C.titleBg)}</Style>`,
+      `<Style ss:ID="meta"><Alignment ss:Vertical="Center"/>` +
+        `<Font ss:FontName="Calibri" ss:Size="10" ss:Italic="1" ss:Color="${C.metaTx}"/>${fill(C.metaBg)}</Style>`,
+      `<Style ss:ID="spacer">${fill(C.titleBg)}</Style>`,
+      // Header
+      `<Style ss:ID="head"><Alignment ss:Vertical="Center" ss:Horizontal="Left"/>` +
+        `<Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="${C.headTx}"/>${fill(C.headBg)}` +
+        `<Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2" ss:Color="#3D49B5"/></Borders></Style>`,
+      // Data — two stripe parities
+      dataStyle('data0', C.rowA, font(C.text)),
+      dataStyle('data1', C.rowB, font(C.text)),
+      dataStyle('label0', C.rowA, font('#FFFFFF', ' ss:Bold="1"')),
+      dataStyle('label1', C.rowB, font('#FFFFFF', ' ss:Bold="1"')),
+      dataStyle('unit0', C.rowA, font(C.accent), alignC),
+      dataStyle('unit1', C.rowB, font(C.accent), alignC),
+      dataStyle('up0', C.rowA, font(C.accent, ' ss:Bold="1"'), alignC),
+      dataStyle('up1', C.rowB, font(C.accent, ' ss:Bold="1"'), alignC),
+      dataStyle('past0', C.rowA, font(C.muted), alignC),
+      dataStyle('past1', C.rowB, font(C.muted), alignC),
+    ].join('\n  ');
+
+    const headRow = `<Row ss:Height="26">` +
+      ['Milestone','Unit','Date','Time','Status','Relative'].map(h => cell(h, 'head')).join('') +
+      `</Row>`;
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>
@@ -1498,28 +1554,31 @@ document.addEventListener('DOMContentLoaded', init);
  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
  xmlns:x="urn:schemas-microsoft-com:office:excel">
 <Styles>
-  <Style ss:ID="header">
-    <Font ss:Bold="1" ss:Color="#FFFFFF"/>
-    <Interior ss:Color="#5E6AD2" ss:Pattern="Solid"/>
-  </Style>
-  <Style ss:ID="meta">
-    <Font ss:Italic="1" ss:Color="#6B6F7A"/>
-  </Style>
+  ${styles}
 </Styles>
 <Worksheet ss:Name="Milestones">
-<Table>
-  <Column ss:Width="220"/>
-  <Column ss:Width="90"/>
+<Table ss:DefaultRowHeight="22">
+  <Column ss:Width="230"/>
+  <Column ss:Width="95"/>
   <Column ss:Width="150"/>
-  <Column ss:Width="170"/>
-  <Column ss:Width="90"/>
-  <Column ss:Width="160"/>
-  <Row><Cell ss:StyleID="meta"><Data ss:Type="String">Date of birth: ${esc(dobStr)}</Data></Cell></Row>
-  <Row><Cell ss:StyleID="meta"><Data ss:Type="String">Generated: ${esc(genStr)}</Data></Cell></Row>
-  <Row/>
-  ${headerRow(['Milestone','Unit','Date','Time','Status','Relative'])}
-  ${rows.map(r => dataRow(r)).join('\n  ')}
+  <Column ss:Width="175"/>
+  <Column ss:Width="100"/>
+  <Column ss:Width="165"/>
+  <Row ss:Height="40"><Cell ss:StyleID="title" ss:MergeAcross="5"><Data ss:Type="String">MY AGE IN — MILESTONES</Data></Cell></Row>
+  <Row ss:Height="18"><Cell ss:StyleID="meta" ss:MergeAcross="5"><Data ss:Type="String">Born ${esc(dobStr)}</Data></Cell></Row>
+  <Row ss:Height="18"><Cell ss:StyleID="meta" ss:MergeAcross="5"><Data ss:Type="String">Generated ${esc(genStr)} · myagein.com</Data></Cell></Row>
+  <Row ss:Height="8"><Cell ss:StyleID="spacer" ss:MergeAcross="5"/></Row>
+  ${headRow}
+  ${dataRows}
 </Table>
+<WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+  <DoNotDisplayGridlines/>
+  <FreezePanes/>
+  <FrozenNoSplit/>
+  <SplitHorizontal>5</SplitHorizontal>
+  <TopRowBottomPane>5</TopRowBottomPane>
+  <ActivePane>2</ActivePane>
+</WorksheetOptions>
 </Worksheet>
 </Workbook>`;
 
