@@ -1,2 +1,7 @@
 # Android app scaffold lives on its own branch (claude/android-capacitor-app)
 android-app/
+
+# Local npm installs (dev tooling only, not part of the static site)
+node_modules/
+package.json
+package-lock.json
