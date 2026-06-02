@@ -376,6 +376,12 @@ select{
           </svg>
           Export Excel
         </button>
+        <button class="export-btn" id="infographic-btn" title="Download a shareable infographic">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
+          </svg>
+          Infographic
+        </button>
         </div>
       </div>
       <div class="ms-grid" id="ms-grid" role="list"></div>
@@ -1380,6 +1386,156 @@ document.addEventListener('DOMContentLoaded', init);
   }
 
   $('export-btn').addEventListener('click', exportToExcel);
+
+  // ── Infographic export (canvas → PNG) ──────────────────────────────────────
+
+  // Set a font that shrinks until `text` fits within maxW (down to a floor).
+  function fitFont(ctx, text, maxW, baseSize, weight) {
+    let size = baseSize;
+    do {
+      ctx.font = `${weight} ${size}px Inter, sans-serif`;
+      if (ctx.measureText(text).width <= maxW) break;
+      size -= 2;
+    } while (size > 18);
+    return size;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y,     x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x,     y + h, r);
+    ctx.arcTo(x,     y + h, x,     y,     r);
+    ctx.arcTo(x,     y,     x + w, y,     r);
+    ctx.closePath();
+  }
+
+  async function exportInfographic() {
+    if (!S.dob) return;
+    // Ensure web fonts are ready so canvas text uses Inter, not a fallback.
+    if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+
+    const W = 1080, H = 1350, P = 80;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const ctx = c.getContext('2d');
+
+    // ── Background: dark base + purple glow ──
+    ctx.fillStyle = '#0F0F11';
+    ctx.fillRect(0, 0, W, H);
+    let glow = ctx.createRadialGradient(W / 2, -120, 60, W / 2, -120, 900);
+    glow.addColorStop(0, 'rgba(94,106,210,0.55)');
+    glow.addColorStop(0.5, 'rgba(94,106,210,0.12)');
+    glow.addColorStop(1, 'rgba(94,106,210,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, H);
+    let glow2 = ctx.createRadialGradient(W / 2, H + 80, 60, W / 2, H + 80, 700);
+    glow2.addColorStop(0, 'rgba(139,139,255,0.20)');
+    glow2.addColorStop(1, 'rgba(139,139,255,0)');
+    ctx.fillStyle = glow2;
+    ctx.fillRect(0, 0, W, H);
+
+    // ── Compute values ──
+    const now  = DateTime.now().setZone(S.tz);
+    const ms   = now.toMillis() - S.dob.toMillis();
+    const sec  = Math.floor(ms / 1000);
+    const days = Math.floor(ms / 86400000);
+    const fmt  = n => Math.floor(Math.abs(n)).toLocaleString('en-US');
+
+    const stats = [
+      { v: fmt(now.diff(S.dob, 'years').years), u: 'YEARS' },
+      { v: fmt(days),                           u: 'DAYS' },
+      { v: fmt(ms / 3600000),                   u: 'HOURS' },
+      { v: fmt(ms / 60000),                     u: 'MINUTES' },
+      { v: fmt(sec),                            u: 'SECONDS' },
+      { v: fmt(sec * BEATS_PER_SEC),            u: 'HEARTBEATS' },
+    ];
+
+    // ── Header ──
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#8B8BFF';
+    ctx.font = '600 30px Inter, sans-serif';
+    ctx.fillText('MY AGE IN NUMBERS', W / 2, P + 30);
+
+    ctx.fillStyle = '#F7F8F8';
+    ctx.font = '600 58px Inter, sans-serif';
+    ctx.fillText(`Born ${S.dob.toFormat('MMMM d, yyyy')}`, W / 2, P + 110);
+
+    ctx.fillStyle = '#6B6F7A';
+    ctx.font = '300 26px Inter, sans-serif';
+    ctx.fillText(`as of ${now.toFormat('MMMM d, yyyy')}`, W / 2, P + 152);
+
+    // ── Stat cards (2 cols × 3 rows) ──
+    const gridTop = P + 215;
+    const cols = 2, gap = 26;
+    const cardW = (W - P * 2 - gap) / cols;
+    const cardH = 165;
+    stats.forEach((s, i) => {
+      const col = i % cols, row = Math.floor(i / cols);
+      const x = P + col * (cardW + gap);
+      const y = gridTop + row * (cardH + gap);
+      ctx.fillStyle = 'rgba(94,106,210,0.10)';
+      roundRect(ctx, x, y, cardW, cardH, 18); ctx.fill();
+      ctx.strokeStyle = 'rgba(94,106,210,0.35)';
+      ctx.lineWidth = 1.5;
+      roundRect(ctx, x, y, cardW, cardH, 18); ctx.stroke();
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#F7F8F8';
+      fitFont(ctx, s.v, cardW - 48, 64, '600');
+      ctx.fillText(s.v, x + cardW / 2, y + 92);
+      ctx.fillStyle = '#8B8BFF';
+      ctx.font = '500 24px Inter, sans-serif';
+      ctx.fillText(s.u, x + cardW / 2, y + 132);
+    });
+
+    // ── Next milestone banner ──
+    const next = S.milestones.find(m => m.date > now);
+    const bannerY = gridTop + 3 * (cardH + gap) + 14;
+    if (next) {
+      const bx = P, bw = W - P * 2, bh = 150;
+      const bgrad = ctx.createLinearGradient(bx, 0, bx + bw, 0);
+      bgrad.addColorStop(0, 'rgba(94,106,210,0.85)');
+      bgrad.addColorStop(1, 'rgba(139,139,255,0.85)');
+      ctx.fillStyle = bgrad;
+      roundRect(ctx, bx, bannerY, bw, bh, 20); ctx.fill();
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      ctx.font = '500 24px Inter, sans-serif';
+      ctx.fillText('NEXT MILESTONE', W / 2, bannerY + 44);
+
+      ctx.fillStyle = '#FFFFFF';
+      fitFont(ctx, next.label, bw - 80, 46, '600');
+      ctx.fillText(next.label, W / 2, bannerY + 92);
+
+      const dd = Math.ceil((next.date.toMillis() - now.toMillis()) / 86400000);
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.font = '400 26px Inter, sans-serif';
+      ctx.fillText(`${next.date.toFormat('MMMM d, yyyy')}  ·  in ${fmt(dd)} days`, W / 2, bannerY + 128);
+    }
+
+    // ── Footer ──
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#6B6F7A';
+    ctx.font = '500 28px Inter, sans-serif';
+    ctx.fillText('myagein.com', W / 2, H - 56);
+
+    // ── Download ──
+    c.toBlob(blob => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `my-age-infographic-${S.dob.toFormat('yyyy-MM-dd')}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    }, 'image/png');
+  }
+
+  $('infographic-btn').addEventListener('click', exportInfographic);
 
 })();
 </script>
