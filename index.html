@@ -70,6 +70,9 @@ main{padding:40px 0 80px}
 .dob-row{display:flex;gap:8px}
 .dob-row input[type="date"]{flex:1;min-width:0}
 .dob-row select{width:104px;flex-shrink:0}
+.time-row{display:flex;align-items:center;gap:6px}
+.time-row select{flex:1;min-width:0;text-align:center;text-align-last:center}
+.time-row .time-colon{color:var(--text-3);font-weight:600}
 input[type="date"],input[type="time"],input[type="number"],input[type="text"],select{
   background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);
   color:var(--text);font-family:var(--sans);font-size:14px;padding:9px 12px;
@@ -328,8 +331,17 @@ select{
             </div>
           </div>
           <div class="field">
-            <label for="time-input">Time of birth <span class="opt">(optional)</span></label>
-            <input type="time" id="time-input" step="1">
+            <label for="time-hour">Time of birth <span class="opt">(optional)</span></label>
+            <div class="time-row">
+              <select id="time-hour" aria-label="Hour of birth" title="Hour"></select>
+              <span class="time-colon" aria-hidden="true">:</span>
+              <select id="time-min" aria-label="Minute of birth" title="Minute"></select>
+              <select id="time-ampm" aria-label="AM or PM" title="AM or PM">
+                <option value="" disabled selected>—</option>
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
             <span class="assumed-badge hidden" id="assumed-badge" aria-live="polite">
               <i data-lucide="info" style="width:11px;height:11px"></i>
               Assuming 12:00:00 PM
@@ -777,19 +789,48 @@ function fmtAgo(date, now) {
 
 // ── Timezone selector ───────────────────────────────────────────────────────
 
+// A short, curated list of common timezones with friendly labels — far easier
+// to scan than the full ~400-zone IANA list. The visitor's detected local zone
+// is always pinned at the top so it's selected by default.
+const TZ_LIST = [
+  ['Pacific/Honolulu',    'Hawaii (HST)'],
+  ['America/Anchorage',   'Alaska (AKST)'],
+  ['America/Los_Angeles', 'Pacific Time — US & Canada (PT)'],
+  ['America/Denver',      'Mountain Time — US & Canada (MT)'],
+  ['America/Chicago',     'Central Time — US & Canada (CT)'],
+  ['America/New_York',    'Eastern Time — US & Canada (ET)'],
+  ['America/Sao_Paulo',   'São Paulo / Brazil (BRT)'],
+  ['UTC',                 'UTC'],
+  ['Europe/London',       'London / Dublin (GMT/BST)'],
+  ['Europe/Paris',        'Central Europe — Paris, Berlin (CET)'],
+  ['Europe/Athens',       'Eastern Europe — Athens, Cairo (EET)'],
+  ['Europe/Moscow',       'Moscow (MSK)'],
+  ['Asia/Dubai',          'Dubai (GST)'],
+  ['Asia/Kolkata',        'India (IST)'],
+  ['Asia/Shanghai',       'China — Beijing, Shanghai (CST)'],
+  ['Asia/Tokyo',          'Japan / Korea (JST)'],
+  ['Australia/Sydney',    'Sydney / Melbourne (AEST)'],
+  ['Pacific/Auckland',    'New Zealand (NZST)'],
+];
+
 function populateTZ() {
   const sel  = $('tz-select');
   const here = S.tz;
-  const zones = Intl.supportedValuesOf
-    ? Intl.supportedValuesOf('timeZone')
-    : ['UTC','America/New_York','America/Chicago','America/Denver',
-       'America/Los_Angeles','America/Sao_Paulo','Europe/London',
-       'Europe/Paris','Europe/Berlin','Asia/Kolkata','Asia/Tokyo','Australia/Sydney'];
   const frag = document.createDocumentFragment();
-  [here, ...zones.filter(z => z !== here)].forEach(tz => {
+
+  // Pin the detected local zone at the top (unless it's already UTC).
+  const known = TZ_LIST.some(([z]) => z === here);
+  if (here && !known) {
     const o = document.createElement('option');
-    o.value = tz; o.textContent = tz.replace(/_/g, ' ');
-    if (tz === here) o.selected = true;
+    o.value = here; o.textContent = `${here.replace(/_/g, ' ')} (your location)`;
+    o.selected = true;
+    frag.appendChild(o);
+  }
+
+  TZ_LIST.forEach(([zone, label]) => {
+    const o = document.createElement('option');
+    o.value = zone; o.textContent = label;
+    if (zone === here) o.selected = true;
     frag.appendChild(o);
   });
   sel.appendChild(frag);
@@ -1284,9 +1325,49 @@ function init() {
     yearSel.value = v ? v.slice(0, 4) : '';
   }
 
+  // ── Clock selector (hour / minute / AM-PM) ──
+  const hourSel = $('time-hour'), minSel = $('time-min'), ampmSel = $('time-ampm');
+  const hph = document.createElement('option');
+  hph.value = ''; hph.textContent = 'Hr'; hph.disabled = true; hph.selected = true;
+  hourSel.appendChild(hph);
+  for (let h = 1; h <= 12; h++) {
+    const o = document.createElement('option');
+    o.value = String(h); o.textContent = String(h);
+    hourSel.appendChild(o);
+  }
+  const mph = document.createElement('option');
+  mph.value = ''; mph.textContent = 'Min'; mph.disabled = true; mph.selected = true;
+  minSel.appendChild(mph);
+  for (let m = 0; m < 60; m++) {
+    const o = document.createElement('option');
+    o.value = String(m); o.textContent = pad(m);
+    minSel.appendChild(o);
+  }
+
+  // Returns a 24-hour "HH:mm:00" string, or '' if the time is incomplete.
+  function getTimeValue() {
+    const h = hourSel.value, m = minSel.value, ap = ampmSel.value;
+    if (h === '' || m === '' || ap === '') return '';
+    let hh = parseInt(h, 10) % 12;
+    if (ap === 'PM') hh += 12;
+    return `${pad(hh)}:${pad(parseInt(m, 10))}:00`;
+  }
+
+  // Populates the three selectors from an "HH:mm[:ss]" 24-hour string.
+  function setTimeSelectors(hhmmss) {
+    if (!hhmmss) return;
+    const [hStr, mStr] = hhmmss.split(':');
+    let hh = parseInt(hStr, 10);
+    const ap = hh >= 12 ? 'PM' : 'AM';
+    let h12 = hh % 12; if (h12 === 0) h12 = 12;
+    hourSel.value = String(h12);
+    minSel.value  = String(parseInt(mStr, 10));
+    ampmSel.value = ap;
+  }
+
   function recalc() {
     const dob  = $('dob-input').value;
-    const time = $('time-input').value;
+    const time = getTimeValue();
     const tz   = $('tz-select').value;
     if (dob) applyDOB(dob, time || null, time ? 'exact' : 'assumed', tz);
   }
@@ -1306,7 +1387,7 @@ function init() {
 
   $('dob-input').addEventListener('change', syncYearSelect);
   $('dob-input').addEventListener('change', recalc);
-  $('time-input').addEventListener('change', recalc);
+  [hourSel, minSel, ampmSel].forEach(el => el.addEventListener('change', recalc));
   $('tz-select').addEventListener('change', () => { S.tz = $('tz-select').value; recalc(); });
 
   $('filter-tabs').addEventListener('click', e => {
@@ -1327,7 +1408,7 @@ function init() {
   if (dob) {
     $('dob-input').value = dob;
     syncYearSelect();
-    if (time && timeType === 'exact') $('time-input').value = time;
+    if (time && timeType === 'exact') setTimeSelectors(time);
     if (tz) { const opt = Array.from($('tz-select').options).find(o => o.value === tz); if (opt) opt.selected = true; }
     S.highlightId = highlight;
     applyDOB(dob, (time && timeType === 'exact') ? time : null, timeType || 'assumed', tz);
