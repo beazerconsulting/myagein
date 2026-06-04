@@ -209,6 +209,16 @@ select{
 .tab:hover{color:var(--text);border-color:var(--border-l)}
 .tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500;box-shadow:0 0 12px rgba(94,106,210,.4)}
 .ms-count{font-size:12px;color:var(--text-3);white-space:nowrap}
+.past-toggle{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:100px;font-size:12px;font-weight:500;
+  cursor:pointer;border:1px solid var(--border);color:var(--text-2);
+  background:transparent;font-family:var(--sans);
+  transition:all .15s;letter-spacing:-.01em;white-space:nowrap;
+}
+.past-toggle:hover{color:var(--text);border-color:var(--border-l)}
+.past-toggle.showing{border-color:rgba(94,106,210,.45);color:var(--accent-h);background:rgba(94,106,210,.08)}
+.past-toggle i{flex-shrink:0}
 .export-btn{
   display:inline-flex;align-items:center;gap:5px;
   padding:5px 13px;border-radius:100px;font-size:12px;font-weight:500;
@@ -438,6 +448,10 @@ select{
           <button class="tab" data-filter="heartbeats"        role="tab" aria-selected="false">Heartbeats</button>
         </div>
         <div class="filter-right">
+        <button class="past-toggle" id="past-toggle" role="switch" aria-checked="true" title="Show or hide milestones you've already passed">
+          <i data-lucide="eye-off" style="width:13px;height:13px"></i>
+          <span id="past-toggle-label">Passed hidden</span>
+        </button>
         <span class="ms-count" id="ms-count" aria-live="polite"></span>
         <button class="export-btn" id="export-btn" title="Export all milestones to Excel">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -871,6 +885,7 @@ const S = {
   timeProvided: false,
   tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
   filter: 'all',
+  hidePast: true,
   highlightId: null,
   milestones: [],
   tick: null,
@@ -1240,11 +1255,14 @@ function makeCard(m, now) {
 function renderMilestones() {
   const grid = $('ms-grid');
   const now  = DateTime.now().setZone(S.tz);
-  const list = S.filter === 'all' ? S.milestones : S.milestones.filter(m => m.unit === S.filter);
+  let list = S.filter === 'all' ? S.milestones : S.milestones.filter(m => m.unit === S.filter);
+  if (S.hidePast) list = list.filter(m => m.date > now);
 
   grid.innerHTML = '';
   if (!list.length) {
-    grid.innerHTML = '<p class="empty">No milestones in this category within the 110-year cap.</p>';
+    grid.innerHTML = S.hidePast
+      ? '<p class="empty">No upcoming milestones here — toggle “Passed hidden” to see ones you’ve already reached.</p>'
+      : '<p class="empty">No milestones in this category within the 110-year cap.</p>';
     return;
   }
   const frag = document.createDocumentFragment();
@@ -1254,7 +1272,9 @@ function renderMilestones() {
 
   const total    = S.milestones.length;
   const upcoming = S.milestones.filter(m => m.date > now).length;
-  $('ms-count').textContent = `${fmtN(upcoming)} upcoming · ${fmtN(total - upcoming)} past`;
+  $('ms-count').textContent = S.hidePast
+    ? `${fmtN(upcoming)} upcoming`
+    : `${fmtN(upcoming)} upcoming · ${fmtN(total - upcoming)} past`;
 }
 
 // ── Shared milestone finder ─────────────────────────────────────────────────
@@ -1552,6 +1572,18 @@ function init() {
     document.querySelectorAll('#filter-tabs .tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
     tab.classList.add('active'); tab.setAttribute('aria-selected','true');
     S.filter = tab.dataset.filter;
+    renderMilestones();
+  });
+
+  // Toggle for hiding/showing milestones already passed (hidden by default).
+  $('past-toggle').addEventListener('click', () => {
+    S.hidePast = !S.hidePast;
+    const btn = $('past-toggle');
+    btn.classList.toggle('showing', !S.hidePast);
+    btn.setAttribute('aria-checked', String(S.hidePast));
+    btn.querySelector('i').setAttribute('data-lucide', S.hidePast ? 'eye-off' : 'eye');
+    $('past-toggle-label').textContent = S.hidePast ? 'Passed hidden' : 'Showing all';
+    lucide.createIcons();
     renderMilestones();
   });
 
