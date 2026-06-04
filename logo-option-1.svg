@@ -1,139 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Background gradient -->
-    <radialGradient id="bgGrad" cx="50%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#7C6FE8"/>
-      <stop offset="100%" stop-color="#3B2A9E"/>
+    <radialGradient id="bg" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#7C5FE0"/>
+      <stop offset="100%" stop-color="#1E1060"/>
     </radialGradient>
-    <!-- Clock face gradient -->
-    <radialGradient id="faceGrad" cx="50%" cy="45%" r="55%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.04"/>
-    </radialGradient>
-    <!-- Glow filter -->
-    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-    <!-- Subtle shadow for clock -->
-    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#1E1065" flood-opacity="0.5"/>
-    </filter>
-    <!-- Hand glow -->
-    <filter id="handGlow">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-    <!-- Sparkle gradient -->
-    <linearGradient id="sparkleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F0EDFF"/>
-      <stop offset="100%" stop-color="#C4B5FD"/>
-    </linearGradient>
-    <!-- Rim tick gradient -->
-    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#A78BFA"/>
-      <stop offset="100%" stop-color="#6D4FD4"/>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C4B5FD" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#6D4FC8" stop-opacity="0.3"/>
     </linearGradient>
   </defs>
 
-  <!-- Rounded square background -->
-  <rect width="512" height="512" rx="108" ry="108" fill="url(#bgGrad)"/>
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
 
-  <!-- Subtle inner vignette ring -->
-  <circle cx="256" cy="256" r="220" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity="0.08"/>
+  <!-- Clock circle -->
+  <circle cx="256" cy="256" r="168" fill="none" stroke="url(#ring)" stroke-width="3"/>
 
-  <!-- Clock outer ring shadow -->
-  <circle cx="256" cy="256" r="185" fill="none" stroke="#1E1065" stroke-width="4" stroke-opacity="0.3" filter="url(#shadow)"/>
+  <!-- Hour hand (~10 o'clock) -->
+  <line x1="256" y1="256" x2="196" y2="148" stroke="white" stroke-width="14" stroke-linecap="round"/>
 
-  <!-- Clock face -->
-  <circle cx="256" cy="256" r="185" fill="url(#faceGrad)" stroke="#FFFFFF" stroke-width="2" stroke-opacity="0.25"/>
+  <!-- Minute hand (~2 o'clock) -->
+  <line x1="256" y1="256" x2="336" y2="124" stroke="white" stroke-width="9" stroke-linecap="round" opacity="0.75"/>
 
-  <!-- Clock ring border with gradient feel -->
-  <circle cx="256" cy="256" r="185" fill="none" stroke="url(#rimGrad)" stroke-width="3.5" stroke-opacity="0.6"/>
+  <!-- Accent dot at 12 — the "milestone" -->
+  <circle cx="256" cy="90" r="14" fill="#A78BFA"/>
+  <circle cx="256" cy="90" r="7" fill="white"/>
 
-  <!-- Hour tick marks -->
-  <!-- 12 o'clock -->
-  <line x1="256" y1="82" x2="256" y2="100" stroke="#E0D9FF" stroke-width="3.5" stroke-linecap="round" stroke-opacity="0.9"/>
-  <!-- 1 o'clock -->
-  <line x1="347.3" y1="108.7" x2="338.4" y2="124.1" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.7"/>
-  <!-- 2 o'clock -->
-  <line x1="411.3" y1="164.7" x2="399.3" y2="175.3" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.7"/>
-  <!-- 3 o'clock -->
-  <line x1="432" y1="256" x2="413" y2="256" stroke="#E0D9FF" stroke-width="3.5" stroke-linecap="round" stroke-opacity="0.9"/>
-  <!-- 4 o'clock -->
-  <line x1="411.3" y1="347.3" x2="399.3" y2="336.7" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.7"/>
-  <!-- 5 o'clock -->
-  <line x1="347.3" y1="403.3" x2="338.4" y2="387.9" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.7"/>
-  <!-- 6 o'clock -->
-  <line x1="256" y1="422" x2="256" y2="412" stroke="#E0D9FF" stroke-width="3.5" stroke-linecap="round" stroke-opacity="0.9"/>
-  <!-- 7 o'clock -->
-  <line x1="164.7" y1="403.3" x2="173.6" y2="387.9" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.7"/>
-  <!-- 8 o'clock -->
-  <line x1="100.7" y1="347.3" x2="112.7" y2="336.7" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.7"/>
-  <!-- 9 o'clock -->
-  <line x1="71" y1="256" x2="99" y2="256" stroke="#E0D9FF" stroke-width="3.5" stroke-linecap="round" stroke-opacity="0.9"/>
-  <!-- 10 o'clock -->
-  <line x1="100.7" y1="164.7" x2="112.7" y2="175.3" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.7"/>
-  <!-- 11 o'clock -->
-  <line x1="164.7" y1="108.7" x2="173.6" y2="124.1" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.7"/>
-
-  <!-- Milestone dots at key positions (glowing) -->
-  <!-- 12 (birth moment) -->
-  <circle cx="256" cy="92" r="5.5" fill="#F0EDFF" filter="url(#glow)" opacity="0.95"/>
-  <!-- 3 (milestone 1) -->
-  <circle cx="441" cy="256" r="4.5" fill="#C4B5FD" filter="url(#glow)" opacity="0.85"/>
-  <!-- 6 (milestone 2) -->
-  <circle cx="256" cy="441" r="4.5" fill="#C4B5FD" filter="url(#glow)" opacity="0.85"/>
-  <!-- 9 (milestone 3) -->
-  <circle cx="71" cy="256" r="4.5" fill="#C4B5FD" filter="url(#glow)" opacity="0.85"/>
-
-  <!-- Small milestone label arcs (subtle numbers) -->
-  <!-- "1B" near 2 o'clock position -->
-  <text x="385" y="192" font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="600" fill="#D8B4FE" opacity="0.65" text-anchor="middle">1B</text>
-  <!-- "10K" near 4 o'clock -->
-  <text x="388" y="324" font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="600" fill="#D8B4FE" opacity="0.65" text-anchor="middle">10K</text>
-  <!-- "100" near 8 o'clock -->
-  <text x="122" y="324" font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="600" fill="#D8B4FE" opacity="0.65" text-anchor="middle">100</text>
-  <!-- "50" near 10 o'clock -->
-  <text x="122" y="192" font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="600" fill="#D8B4FE" opacity="0.65" text-anchor="middle">50</text>
-
-  <!-- Hour hand — pointing to ~10 o'clock (milestone position) -->
-  <line x1="256" y1="256" x2="175" y2="175"
-        stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"
-        filter="url(#handGlow)" opacity="0.95"/>
-
-  <!-- Minute hand — pointing to ~2 o'clock -->
-  <line x1="256" y1="256" x2="330" y2="140"
-        stroke="#E0D9FF" stroke-width="5" stroke-linecap="round"
-        filter="url(#handGlow)" opacity="0.9"/>
-
-  <!-- Seconds hand — thin, accent color -->
-  <line x1="256" y1="290" x2="256" y2="115"
-        stroke="#F9A8D4" stroke-width="2.5" stroke-linecap="round"
-        opacity="0.85"/>
-
-  <!-- Center cap -->
-  <circle cx="256" cy="256" r="10" fill="#FFFFFF" opacity="0.95"/>
-  <circle cx="256" cy="256" r="5" fill="#8B5CF6"/>
-
-  <!-- "MAI" initials subtle text at bottom of clock face -->
-  <text x="256" y="348"
-        font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
-        font-size="22" font-weight="700" letter-spacing="6"
-        fill="#FFFFFF" opacity="0.5" text-anchor="middle">MAI</text>
-
-  <!-- Sparkle stars at milestone tick positions -->
-  <!-- 12 position sparkle -->
-  <g transform="translate(256, 68)" opacity="0.9" filter="url(#glow)">
-    <line x1="0" y1="-7" x2="0" y2="7" stroke="url(#sparkleGrad)" stroke-width="1.8" stroke-linecap="round"/>
-    <line x1="-7" y1="0" x2="7" y2="0" stroke="url(#sparkleGrad)" stroke-width="1.8" stroke-linecap="round"/>
-    <line x1="-5" y1="-5" x2="5" y2="5" stroke="url(#sparkleGrad)" stroke-width="1.2" stroke-linecap="round"/>
-    <line x1="5" y1="-5" x2="-5" y2="5" stroke="url(#sparkleGrad)" stroke-width="1.2" stroke-linecap="round"/>
-  </g>
+  <!-- Center pivot -->
+  <circle cx="256" cy="256" r="10" fill="white"/>
 </svg>
