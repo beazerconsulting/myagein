@@ -1807,6 +1807,24 @@ document.addEventListener('DOMContentLoaded', init);
       ctx.strokeStyle = accent ? 'rgba(139,139,255,0.55)' : 'rgba(94,106,210,0.24)';
       ctx.lineWidth = 1.5; roundRect(ctx, x, yy, w, h, 16); ctx.stroke();
     };
+    // Render an emoji recolored as a violet gradient silhouette. Color emoji
+    // ignore fillStyle, so we draw the glyph to an offscreen canvas and use a
+    // 'source-in' composite to paint the gradient only where the glyph is.
+    const drawGradientEmoji = (emoji, cx, baseline, size) => {
+      const box = Math.ceil(size * 1.6);
+      const base = box * 0.8; // glyph baseline within the offscreen box
+      const tmp = document.createElement('canvas');
+      tmp.width = box; tmp.height = box;
+      const t = tmp.getContext('2d');
+      t.textAlign = 'center'; t.textBaseline = 'alphabetic';
+      t.font = `${size}px ${SYM}`;
+      t.fillText(emoji, box / 2, base);
+      const g = t.createLinearGradient(0, box * 0.12, 0, box * 0.92);
+      g.addColorStop(0, '#C4B5FD'); g.addColorStop(1, '#5E6AD2');
+      t.globalCompositeOperation = 'source-in';
+      t.fillStyle = g; t.fillRect(0, 0, box, box);
+      ctx.drawImage(tmp, cx - box / 2, baseline - base);
+    };
 
     // ── Header ──
     let y = 92;
@@ -1911,8 +1929,7 @@ document.addEventListener('DOMContentLoaded', init);
         const x = P + i * (cw + gap), mult = earthD / a.days;
         cardBox(x, y, cw, ch, false);
         ctx.textAlign = 'center';
-        ctx.font = `40px ${SYM}`;
-        ctx.fillText(a.emoji, x + cw / 2, y + 52);
+        drawGradientEmoji(a.emoji, x + cw / 2, y + 52, 40);
         ctx.fillStyle = '#F7F8F8'; ctx.font = '600 26px Inter, sans-serif';
         ctx.fillText(mult >= 100 ? fmt(mult) + '×' : mult.toFixed(1) + '×', x + cw / 2, y + 88);
         ctx.fillStyle = '#6B6F7A'; ctx.font = '500 15px Inter, sans-serif';
