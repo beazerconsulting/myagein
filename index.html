@@ -198,8 +198,10 @@ select{
 .h-rel.future{color:var(--text-3);font-style:italic}
 
 /* ── Filter tabs ─────────────────────────────────── */
-.filter-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
-.filter-right{display:flex;align-items:center;gap:10px;}
+.filter-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px 16px;flex-wrap:wrap}
+.filter-right{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap}
+.ms-status{display:flex;align-items:center;gap:10px}
+.ms-actions{display:flex;align-items:center;gap:8px}
 .filter-tabs{display:flex;gap:5px;flex-wrap:wrap}
 .tab{
   padding:5px 13px;border-radius:100px;font-size:12px;font-weight:400;
@@ -210,24 +212,25 @@ select{
 .tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500;box-shadow:0 0 12px rgba(94,106,210,.4)}
 .ms-count{font-size:12px;color:var(--text-3);white-space:nowrap}
 .past-toggle{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:5px 12px;border-radius:100px;font-size:12px;font-weight:500;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:100px;font-size:12.5px;font-weight:500;
   cursor:pointer;border:1px solid var(--border);color:var(--text-2);
-  background:transparent;font-family:var(--sans);
+  background:var(--surface);font-family:var(--sans);
   transition:all .15s;letter-spacing:-.01em;white-space:nowrap;
 }
-.past-toggle:hover{color:var(--text);border-color:var(--border-l)}
-.past-toggle.showing{border-color:rgba(94,106,210,.45);color:var(--accent-h);background:rgba(94,106,210,.08)}
+.past-toggle:hover{color:var(--text);border-color:var(--border-l);background:var(--surface-h)}
+.past-toggle.showing{border-color:rgba(94,106,210,.5);color:var(--accent-h);background:rgba(94,106,210,.12)}
 .past-toggle i{flex-shrink:0}
 .export-btn{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:5px 13px;border-radius:100px;font-size:12px;font-weight:500;
-  cursor:pointer;border:1px solid rgba(94,106,210,.45);color:var(--accent-h);
-  background:rgba(94,106,210,.08);font-family:var(--sans);
-  transition:all .15s;letter-spacing:-.01em;white-space:nowrap;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:7px 15px;border-radius:100px;font-size:12.5px;font-weight:600;
+  cursor:pointer;border:1px solid rgba(94,106,210,.5);color:var(--accent-h);
+  background:linear-gradient(180deg,rgba(94,106,210,.16),rgba(94,106,210,.08));
+  font-family:var(--sans);transition:all .15s;letter-spacing:-.01em;white-space:nowrap;
 }
-.export-btn:hover{background:rgba(94,106,210,.18);border-color:var(--accent);color:#fff;}
-.export-btn svg{width:13px;height:13px;stroke:currentColor;flex-shrink:0}
+.export-btn:hover{background:linear-gradient(180deg,rgba(94,106,210,.34),rgba(94,106,210,.2));border-color:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(94,106,210,.3)}
+.export-btn:active{transform:translateY(1px)}
+.export-btn svg{width:14px;height:14px;stroke:currentColor;flex-shrink:0}
 
 /* ── Milestone grid ──────────────────────────────── */
 .ms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
@@ -362,6 +365,11 @@ select{
   .manual-row .field:last-of-type{max-width:none!important}
   .shared-card{grid-template-columns:1fr;gap:8px}
   .shared-gap-col{text-align:left;padding:4px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  /* Toolbar: give actions their own full-width row so nothing clips off-screen */
+  .filter-right{width:100%}
+  .ms-status{width:100%;justify-content:space-between}
+  .ms-actions{width:100%}
+  .ms-actions .export-btn{flex:1}
 }
 @media(max-width:380px){.ms-grid{grid-template-columns:1fr}}
 </style>
@@ -448,23 +456,27 @@ select{
           <button class="tab" data-filter="heartbeats"        role="tab" aria-selected="false">Heartbeats</button>
         </div>
         <div class="filter-right">
-        <button class="past-toggle" id="past-toggle" role="switch" aria-checked="true" title="Show or hide milestones you've already passed">
-          <i data-lucide="eye-off" style="width:13px;height:13px"></i>
-          <span id="past-toggle-label">Passed hidden</span>
-        </button>
-        <span class="ms-count" id="ms-count" aria-live="polite"></span>
-        <button class="export-btn" id="export-btn" title="Export all milestones to Excel">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Export Excel
-        </button>
-        <button class="export-btn" id="infographic-btn" title="Download a shareable infographic">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
-          </svg>
-          Infographic
-        </button>
+          <div class="ms-status">
+            <button class="past-toggle" id="past-toggle" role="switch" aria-checked="true" title="Show or hide milestones you've already passed">
+              <i data-lucide="eye-off" style="width:14px;height:14px"></i>
+              <span id="past-toggle-label">Passed hidden</span>
+            </button>
+            <span class="ms-count" id="ms-count" aria-live="polite"></span>
+          </div>
+          <div class="ms-actions">
+            <button class="export-btn" id="export-btn" title="Export all milestones to Excel">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Export Excel</span>
+            </button>
+            <button class="export-btn" id="infographic-btn" title="Download a shareable infographic">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
+              </svg>
+              <span>Infographic</span>
+            </button>
+          </div>
         </div>
       </div>
       <div class="ms-grid" id="ms-grid" role="list"></div>
