@@ -1,188 +1,141 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- App background -->
-    <linearGradient id="bgGrad" x1="20%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stop-color="#312E81"/>
-      <stop offset="100%" stop-color="#1E1B4B"/>
+    <linearGradient id="bg3" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#312077"/>
+      <stop offset="50%" stop-color="#4A35B0"/>
+      <stop offset="100%" stop-color="#1E1460"/>
     </linearGradient>
-    <!-- Shield gradient -->
     <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#7C6FE8"/>
-      <stop offset="45%" stop-color="#5E6AD2"/>
-      <stop offset="100%" stop-color="#4338CA"/>
+      <stop offset="60%" stop-color="#5E6AD2"/>
+      <stop offset="100%" stop-color="#4C3BAF"/>
     </linearGradient>
-    <!-- Shield highlight -->
-    <linearGradient id="shieldHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+    <linearGradient id="shieldHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.22"/>
-      <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.04"/>
       <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
-    <!-- M letter gradient -->
+    <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C4B5FD" stop-opacity="0.2"/>
+      <stop offset="30%" stop-color="#A78BFA"/>
+      <stop offset="70%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#C4B5FD" stop-opacity="0.2"/>
+    </linearGradient>
     <linearGradient id="mGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#FFFFFF"/>
       <stop offset="100%" stop-color="#DDD6FE"/>
     </linearGradient>
-    <!-- Arc timeline gradient -->
-    <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#C4B5FD" stop-opacity="0.2"/>
-      <stop offset="30%" stop-color="#A78BFA" stop-opacity="0.7"/>
-      <stop offset="70%" stop-color="#DDD6FE" stop-opacity="0.9"/>
-      <stop offset="100%" stop-color="#C4B5FD" stop-opacity="0.3"/>
+    <linearGradient id="strokeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C4B5FD"/>
+      <stop offset="50%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#A78BFA"/>
     </linearGradient>
-    <!-- Glow filter -->
-    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+    <filter id="shieldShadow" x="-20%" y="-15%" width="140%" height="135%">
+      <feDropShadow dx="0" dy="14" stdDeviation="22" flood-color="#0D0830" flood-opacity="0.6"/>
     </filter>
-    <!-- Shield shadow -->
-    <filter id="shieldShadow" x="-15%" y="-10%" width="130%" height="135%">
-      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-color="#0F0A3C" flood-opacity="0.55"/>
+    <filter id="mGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <!-- M text shadow -->
-    <filter id="mShadow">
-      <feDropShadow dx="0" dy="3" stdDeviation="8" flood-color="#1E1B4B" flood-opacity="0.5"/>
-    </filter>
-    <!-- Subtle inner glow for shield -->
-    <filter id="innerGlow">
-      <feGaussianBlur stdDeviation="10" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-    <!-- Sparkle glow -->
-    <filter id="sparkGlow">
-      <feGaussianBlur stdDeviation="3.5" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+    <filter id="nodeGlow" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
 
   <!-- Rounded square background -->
-  <rect width="512" height="512" rx="108" ry="108" fill="url(#bgGrad)"/>
+  <rect width="512" height="512" rx="108" ry="108" fill="url(#bg3)"/>
 
-  <!-- Background ambient glow -->
-  <radialGradient id="ambientGlow" cx="50%" cy="50%" r="45%">
-    <stop offset="0%" stop-color="#5E6AD2" stop-opacity="0.15"/>
-    <stop offset="100%" stop-color="#1E1B4B" stop-opacity="0"/>
-  </radialGradient>
-  <rect width="512" height="512" rx="108" ry="108" fill="url(#ambientGlow)"/>
+  <!-- Subtle diagonal sheen on background -->
+  <rect width="512" height="512" rx="108" ry="108" fill="url(#shieldHighlight)" opacity="0.4"/>
 
-  <!-- Shield shape with shadow -->
+  <!-- Shield / badge shape -->
   <g filter="url(#shieldShadow)">
-    <!-- Main shield path: classic rounded shield with pointed bottom -->
-    <path d="M256 82
-             L376 118
-             L376 248
-             Q376 342 256 432
-             Q136 342 136 248
-             L136 118
+    <path d="M256 74
+             L390 120
+             L390 270
+             Q390 370 256 438
+             Q122 370 122 270
+             L122 120
              Z"
           fill="url(#shieldGrad)"/>
   </g>
 
-  <!-- Shield highlight overlay (glass effect) -->
-  <path d="M256 82
-           L376 118
-           L376 248
-           Q376 342 256 432
-           Q136 342 136 248
-           L136 118
-           Z"
-        fill="url(#shieldHighlight)"/>
+  <!-- Shield inner highlight (top edge) -->
+  <path d="M256 86 L378 128 L378 130 L256 88 L134 130 L134 128 Z"
+        fill="white" opacity="0.18"/>
 
-  <!-- Shield border -->
-  <path d="M256 82
-           L376 118
-           L376 248
-           Q376 342 256 432
-           Q136 342 136 248
-           L136 118
-           Z"
-        fill="none" stroke="#C4B5FD" stroke-width="2.5" stroke-opacity="0.4"/>
+  <!-- Shield outer stroke -->
+  <path d="M256 74 L390 120 L390 270 Q390 370 256 438 Q122 370 122 270 L122 120 Z"
+        fill="none" stroke="url(#strokeGrad)" stroke-width="3" opacity="0.85"/>
 
-  <!-- Inner shield border (inset, subtle) -->
-  <path d="M256 100
-           L360 132
-           L360 248
-           Q360 328 256 408
-           Q152 328 152 248
-           L152 132
-           Z"
-        fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.12"/>
+  <!-- Inner shield border (inset) -->
+  <path d="M256 96 L372 136 L372 268 Q372 355 256 416 Q140 355 140 268 L140 136 Z"
+        fill="none" stroke="white" stroke-width="1.2" opacity="0.15"/>
 
-  <!-- Timeline arc — sweeping across the shield, below the M -->
-  <!-- Arc from bottom-left to bottom-right of the shield interior -->
-  <path d="M176 352 Q256 310 336 352"
-        fill="none" stroke="url(#arcGrad)" stroke-width="3" stroke-linecap="round"/>
+  <!-- Timeline arc inside shield, upper section -->
+  <path d="M176 290 Q256 230 336 290"
+        fill="none" stroke="url(#arcGrad)" stroke-width="4" stroke-linecap="round"/>
 
-  <!-- Timeline milestone dots on the arc -->
-  <!-- Left end -->
-  <circle cx="176" cy="352" r="4.5" fill="#A78BFA" filter="url(#sparkGlow)" opacity="0.85"/>
-  <!-- Quarter -->
-  <circle cx="206" cy="327" r="3.5" fill="#C4B5FD" filter="url(#sparkGlow)" opacity="0.8"/>
-  <!-- Middle (brightest) -->
-  <circle cx="256" cy="316" r="6" fill="#FFFFFF" filter="url(#glow)" opacity="0.95"/>
-  <!-- Three-quarter -->
-  <circle cx="306" cy="327" r="3.5" fill="#C4B5FD" filter="url(#sparkGlow)" opacity="0.8"/>
-  <!-- Right end -->
-  <circle cx="336" cy="352" r="4.5" fill="#A78BFA" filter="url(#sparkGlow)" opacity="0.85"/>
-
-  <!-- Milestone labels on arc -->
-  <text x="176" y="372" font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
-        font-size="11" font-weight="600" fill="#DDD6FE" opacity="0.55" text-anchor="middle">0</text>
-  <text x="256" y="372" font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
-        font-size="11" font-weight="600" fill="#EDE9FE" opacity="0.7" text-anchor="middle">1B s</text>
-  <text x="336" y="372" font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
-        font-size="11" font-weight="600" fill="#DDD6FE" opacity="0.55" text-anchor="middle">∞</text>
-
-  <!-- Bold "M" monogram — centered in shield -->
-  <text x="256" y="295"
-        font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
-        font-size="168" font-weight="800"
-        fill="url(#mGrad)"
-        filter="url(#mShadow)"
-        text-anchor="middle"
-        dominant-baseline="auto"
-        opacity="0.97">M</text>
-
-  <!-- Subtle "AI" subscript below M, inside shield -->
-  <!-- (Handled by arc area, skip extra text to keep clean) -->
-
-  <!-- Top shield accent: two small symmetrical stars flanking the apex -->
-  <g transform="translate(218, 104)" filter="url(#sparkGlow)" opacity="0.7">
-    <line x1="0" y1="-6" x2="0" y2="6" stroke="#DDD6FE" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="-6" y1="0" x2="6" y2="0" stroke="#DDD6FE" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="-4" y1="-4" x2="4" y2="4" stroke="#C4B5FD" stroke-width="1" stroke-linecap="round"/>
-    <line x1="4" y1="-4" x2="-4" y2="4" stroke="#C4B5FD" stroke-width="1" stroke-linecap="round"/>
+  <!-- Timeline nodes on the arc -->
+  <!-- Left node -->
+  <g filter="url(#nodeGlow)">
+    <circle cx="176" cy="290" r="9"  fill="#FCD34D" opacity="0.95"/>
+    <circle cx="176" cy="290" r="5"  fill="#FEF9C3"/>
   </g>
-  <g transform="translate(294, 104)" filter="url(#sparkGlow)" opacity="0.7">
-    <line x1="0" y1="-6" x2="0" y2="6" stroke="#DDD6FE" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="-6" y1="0" x2="6" y2="0" stroke="#DDD6FE" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="-4" y1="-4" x2="4" y2="4" stroke="#C4B5FD" stroke-width="1" stroke-linecap="round"/>
-    <line x1="4" y1="-4" x2="-4" y2="4" stroke="#C4B5FD" stroke-width="1" stroke-linecap="round"/>
+  <!-- Center node (apex) -->
+  <g filter="url(#nodeGlow)">
+    <circle cx="256" cy="243" r="10" fill="#FCD34D" opacity="0.95"/>
+    <circle cx="256" cy="243" r="5.5" fill="#FFFBEB"/>
+  </g>
+  <!-- Right node -->
+  <g filter="url(#nodeGlow)">
+    <circle cx="336" cy="290" r="9"  fill="#FCD34D" opacity="0.95"/>
+    <circle cx="336" cy="290" r="5"  fill="#FEF9C3"/>
   </g>
 
-  <!-- Corner ambient sparkles (outside shield, on the app bg) -->
-  <g transform="translate(90, 110)" filter="url(#sparkGlow)" opacity="0.5">
-    <line x1="0" y1="-8" x2="0" y2="8" stroke="#7C6FE8" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="-8" y1="0" x2="8" y2="0" stroke="#7C6FE8" stroke-width="1.5" stroke-linecap="round"/>
-  </g>
-  <g transform="translate(422, 90)" filter="url(#sparkGlow)" opacity="0.45">
-    <line x1="0" y1="-7" x2="0" y2="7" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="-7" y1="0" x2="7" y2="0" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="-5" y1="-5" x2="5" y2="5" stroke="#7C3AED" stroke-width="1" stroke-linecap="round"/>
-    <line x1="5" y1="-5" x2="-5" y2="5" stroke="#7C3AED" stroke-width="1" stroke-linecap="round"/>
-  </g>
-  <g transform="translate(430, 400)" filter="url(#sparkGlow)" opacity="0.4">
-    <line x1="0" y1="-6" x2="0" y2="6" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="-6" y1="0" x2="6" y2="0" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round"/>
-  </g>
-  <g transform="translate(82, 400)" filter="url(#sparkGlow)" opacity="0.4">
-    <line x1="0" y1="-5" x2="0" y2="5" stroke="#9F7AEA" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="-5" y1="0" x2="5" y2="0" stroke="#9F7AEA" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Second timeline arc below -->
+  <path d="M196 326 Q256 304 316 326"
+        fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.25"/>
+  <!-- Nodes on second arc -->
+  <circle cx="196" cy="326" r="5" fill="#C4B5FD" opacity="0.8"/>
+  <circle cx="256" cy="312" r="5" fill="#C4B5FD" opacity="0.8"/>
+  <circle cx="316" cy="326" r="5" fill="#C4B5FD" opacity="0.8"/>
+
+  <!-- Bold "M" monogram -->
+  <g filter="url(#mGlow)">
+    <text x="256" y="220"
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="132" font-weight="900"
+          fill="url(#mGrad)"
+          text-anchor="middle"
+          dominant-baseline="auto"
+          opacity="0.97">M</text>
   </g>
 
+  <!-- "AI" subscript below M -->
+  <text x="256" y="248"
+        font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="32" font-weight="700" letter-spacing="14"
+        fill="white" text-anchor="middle" opacity="0.55">AI</text>
+
+  <!-- Decorative corner sparkles on background -->
+  <g fill="#C4B5FD" opacity="0.35">
+    <polygon points="64,64 68,56 72,64 80,68 72,72 68,80 64,72 56,68" transform="scale(0.7) translate(50,40)"/>
+    <polygon points="448,64 452,56 456,64 464,68 456,72 452,80 448,72 440,68" transform="scale(0.6) translate(210,35)"/>
+    <polygon points="64,448 68,440 72,448 80,452 72,456 68,464 64,456 56,452" transform="scale(0.65) translate(40,220)"/>
+  </g>
+
+  <!-- Small sparkle dots -->
+  <circle cx="82"  cy="152" r="3.5" fill="#A78BFA" opacity="0.5"/>
+  <circle cx="68"  cy="180" r="2"   fill="#C4B5FD" opacity="0.4"/>
+  <circle cx="430" cy="150" r="3.5" fill="#A78BFA" opacity="0.5"/>
+  <circle cx="444" cy="178" r="2"   fill="#C4B5FD" opacity="0.4"/>
+  <circle cx="96"  cy="380" r="3"   fill="#A78BFA" opacity="0.45"/>
+  <circle cx="416" cy="380" r="3"   fill="#A78BFA" opacity="0.45"/>
+
+  <!-- "MY AGE IN" micro text at bottom of shield -->
+  <text x="256" y="398"
+        font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="14" font-weight="600" letter-spacing="4"
+        fill="white" text-anchor="middle" opacity="0.55">MY AGE IN</text>
 </svg>
