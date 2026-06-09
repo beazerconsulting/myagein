@@ -35,17 +35,44 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--border-l)}
+::-webkit-scrollbar-thumb{background:rgba(94,106,210,.35);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(94,106,210,.6)}
 .container{max-width:var(--mw);margin:0 auto;padding:0 24px}
 .hidden{display:none!important}
 
 /* ── Header ──────────────────────────────────────── */
 .site-header{
-  padding:72px 0 48px;text-align:center;
-  background:radial-gradient(ellipse 90% 360px at 50% -20px,rgba(94,106,210,.18) 0%,transparent 100%);
+  padding:84px 0 52px;text-align:center;position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse 70% 300px at 50% 0,rgba(167,139,250,.12) 0%,transparent 70%),
+    radial-gradient(ellipse 90% 420px at 50% -40px,rgba(94,106,210,.30) 0%,transparent 70%);
 }
-.site-header h1{font-size:2.25rem;font-weight:600;letter-spacing:-.04em;color:var(--text);margin-bottom:12px}
+.site-header::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(94,106,210,.18) 1px,transparent 1px);
+  background-size:26px 26px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 80% at 50% 30%,#000 0%,transparent 75%);
+          mask-image:radial-gradient(ellipse 70% 80% at 50% 30%,#000 0%,transparent 75%);
+  opacity:.5;
+}
+.site-header>.container{position:relative;z-index:1}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--accent-h);
+  background:var(--accent-dim);border:1px solid rgba(94,106,210,.35);
+  border-radius:100px;padding:6px 14px;margin-bottom:22px;
+  box-shadow:0 0 24px -6px rgba(94,106,210,.4);
+}
+.hero-eyebrow i{width:13px;height:13px}
+.site-header h1{font-size:3.5rem;font-weight:600;letter-spacing:-.045em;line-height:1.04;margin-bottom:12px}
+.hero-title-grad{
+  background:linear-gradient(100deg,#A78BFA 0%,#8B8BFF 35%,#5E6AD2 70%,#8B8BFF 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 4px 28px rgba(94,106,210,.45));
+  animation:heroShimmer 7s linear infinite;
+}
+@keyframes heroShimmer{to{background-position:200% center}}
 .hero-sub{font-size:1rem;color:var(--text-2);font-weight:300;max-width:520px;margin:0 auto 20px;letter-spacing:-.01em;line-height:1.7}
 .hero-kws{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .kw-pill{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:12px;color:var(--text-2)}
@@ -54,8 +81,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 main{padding:40px 0 80px}
 
 /* ── Cards ───────────────────────────────────────── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:24px}
-.card-title{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.07em;text-transform:uppercase;margin-bottom:16px}
+.card{
+  background:linear-gradient(180deg,rgba(94,106,210,.04) 0%,transparent 120px),var(--surface);
+  border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:24px;
+  position:relative;transition:border-color .2s,box-shadow .2s,transform .2s;
+}
+.card:hover{border-color:var(--border-l);transform:translateY(-1px);box-shadow:0 14px 40px -20px rgba(94,106,210,.45)}
+.card-title{
+  font-size:12px;font-weight:600;color:var(--text);letter-spacing:.07em;text-transform:uppercase;
+  margin-bottom:16px;display:flex;align-items:center;gap:9px;
+}
+.card-title::before{
+  content:"";width:3px;height:14px;border-radius:2px;flex-shrink:0;
+  background:linear-gradient(180deg,var(--accent-h),var(--accent));
+  box-shadow:0 0 10px rgba(94,106,210,.6);
+}
 .section-gap{margin-top:32px}
 
 /* ── Form ────────────────────────────────────────── */
@@ -64,6 +104,14 @@ main{padding:40px 0 80px}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.03em}
 .field label .opt{font-weight:300;color:var(--text-3);margin-left:4px}
+.dob-row{display:flex;gap:8px}
+.dob-row select{min-width:0;text-align:center;text-align-last:center}
+.dob-row #dob-month{flex:1.4}
+.dob-row #dob-day{flex:.8}
+.dob-row #dob-year{flex:1}
+.time-row{display:flex;align-items:center;gap:6px}
+.time-row select{flex:1;min-width:0;text-align:center;text-align-last:center}
+.time-row .time-colon{color:var(--text-3);font-weight:600}
 input[type="date"],input[type="time"],input[type="number"],input[type="text"],select{
   background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);
   color:var(--text);font-family:var(--sans);font-size:14px;padding:9px 12px;
@@ -102,18 +150,26 @@ select{
 /* ── Age grid ────────────────────────────────────── */
 .age-grid{
   display:grid;grid-template-columns:repeat(4,1fr);
-  gap:1px;background:var(--border);border:1px solid var(--border);
+  gap:1px;background:var(--border);border:1px solid var(--border-l);
   border-radius:var(--r);overflow:hidden;margin-bottom:32px;
+  box-shadow:0 0 0 1px rgba(94,106,210,.08),0 18px 50px -28px rgba(94,106,210,.5);
 }
-.age-cell{background:var(--surface);padding:16px 18px;display:flex;flex-direction:column;gap:3px;transition:background .1s}
-.age-cell:hover{background:var(--surface-h)}
-.age-val{font-family:var(--mono);font-size:1.05rem;font-weight:500;color:var(--text);letter-spacing:-.03em;line-height:1.2}
-.age-unit{font-size:11px;color:var(--text-2);font-weight:400;text-transform:uppercase;letter-spacing:.07em}
+.age-cell{
+  background:linear-gradient(160deg,rgba(94,106,210,.05),transparent 60%),var(--surface);
+  padding:17px 18px;display:flex;flex-direction:column;gap:3px;transition:background .15s,box-shadow .15s;
+}
+.age-cell:hover{background:linear-gradient(160deg,rgba(94,106,210,.14),transparent 70%),var(--surface-h);box-shadow:inset 0 -2px 0 var(--accent)}
+.age-val{
+  font-family:var(--mono);font-size:1.1rem;font-weight:500;letter-spacing:-.03em;line-height:1.2;
+  background:linear-gradient(180deg,#fff,#C5C8FF);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+}
+.age-unit{font-size:11px;color:var(--text-2);font-weight:500;text-transform:uppercase;letter-spacing:.07em}
 
 /* ── Planet grid ─────────────────────────────────── */
 .planet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:8px}
-.planet-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;transition:border-color .15s}
-.planet-card:hover{border-color:var(--border-l)}
+.planet-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;transition:border-color .15s,box-shadow .15s}
+.planet-card:hover{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-dim)}
 .planet-sym{font-size:1.4rem;line-height:1;margin-bottom:8px}
 .planet-name{font-size:11px;font-weight:500;color:var(--text-2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
 .planet-age-val{font-family:var(--mono);font-size:1rem;font-weight:500;color:var(--text);letter-spacing:-.02em;line-height:1.2}
@@ -143,7 +199,10 @@ select{
 .h-rel.future{color:var(--text-3);font-style:italic}
 
 /* ── Filter tabs ─────────────────────────────────── */
-.filter-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.filter-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px 16px;flex-wrap:wrap}
+.filter-right{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap}
+.ms-status{display:flex;align-items:center;gap:10px}
+.ms-actions{display:flex;align-items:center;gap:8px}
 .filter-tabs{display:flex;gap:5px;flex-wrap:wrap}
 .tab{
   padding:5px 13px;border-radius:100px;font-size:12px;font-weight:400;
@@ -151,21 +210,44 @@ select{
   background:transparent;font-family:var(--sans);transition:all .12s;letter-spacing:-.01em;
 }
 .tab:hover{color:var(--text);border-color:var(--border-l)}
-.tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500;box-shadow:0 0 12px rgba(94,106,210,.4)}
 .ms-count{font-size:12px;color:var(--text-3);white-space:nowrap}
+.past-toggle{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:100px;font-size:12.5px;font-weight:500;
+  cursor:pointer;border:1px solid var(--border);color:var(--text-2);
+  background:var(--surface);font-family:var(--sans);
+  transition:all .15s;letter-spacing:-.01em;white-space:nowrap;
+}
+.past-toggle:hover{color:var(--text);border-color:var(--border-l);background:var(--surface-h)}
+.past-toggle.showing{border-color:rgba(94,106,210,.5);color:var(--accent-h);background:rgba(94,106,210,.12)}
+.past-toggle i{flex-shrink:0}
+.export-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:7px 15px;border-radius:100px;font-size:12.5px;font-weight:600;
+  cursor:pointer;border:1px solid rgba(94,106,210,.5);color:var(--accent-h);
+  background:linear-gradient(180deg,rgba(94,106,210,.16),rgba(94,106,210,.08));
+  font-family:var(--sans);transition:all .15s;letter-spacing:-.01em;white-space:nowrap;
+}
+.export-btn:hover{background:linear-gradient(180deg,rgba(94,106,210,.34),rgba(94,106,210,.2));border-color:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(94,106,210,.3)}
+.export-btn:active{transform:translateY(1px)}
+.export-btn svg{width:14px;height:14px;stroke:currentColor;flex-shrink:0}
 
 /* ── Milestone grid ──────────────────────────────── */
 .ms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
 .ms-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
   padding:15px 16px;position:relative;display:flex;flex-direction:column;gap:7px;
-  animation:fadeIn .15s ease;transition:border-color .15s;
+  animation:fadeIn .15s ease;transition:border-color .15s,box-shadow .15s,transform .15s;
 }
-.ms-card:hover{border-color:var(--border-l)}
-.ms-card.upcoming{border-color:rgba(94,106,210,.25)}
-.ms-card.upcoming:hover{border-color:var(--accent)}
+.ms-card:hover{border-color:var(--border-l);transform:translateY(-2px);box-shadow:0 12px 30px -18px rgba(94,106,210,.5)}
+.ms-card.upcoming{
+  border-color:rgba(94,106,210,.3);border-top:2px solid rgba(94,106,210,.5);
+  background:linear-gradient(165deg,rgba(94,106,210,.07),transparent 55%),var(--surface);
+}
+.ms-card.upcoming:hover{border-color:var(--accent);box-shadow:0 12px 34px -16px rgba(94,106,210,.65)}
 .ms-card.past{opacity:.5}
-.ms-card.highlighted{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.ms-card.highlighted{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 30px -8px rgba(94,106,210,.7)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 .ms-unit{font-size:11px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em}
 .ms-label{font-size:14px;font-weight:500;color:var(--text);letter-spacing:-.02em;line-height:1.25}
@@ -259,7 +341,8 @@ select{
 .faq-item p{font-size:14px;color:var(--text-2);font-weight:300;line-height:1.75}
 
 /* ── Footer ──────────────────────────────────────── */
-.site-footer{border-top:1px solid var(--border);padding:24px 0;text-align:center;color:var(--text-3);font-size:12px}
+.site-footer{border-top:1px solid var(--border);padding:24px 0;text-align:center;color:var(--text-3);font-size:12px;
+  background:linear-gradient(to bottom,rgba(94,106,210,.04) 0%,transparent 60px);}
 
 /* ── Toast ───────────────────────────────────────── */
 .toast{
@@ -275,7 +358,7 @@ select{
 
 /* ── Responsive ──────────────────────────────────── */
 @media(max-width:640px){
-  .site-header h1{font-size:1.75rem}
+  .site-header h1{font-size:2.2rem}
   .form-row,.shared-form{grid-template-columns:1fr}
   .age-grid{grid-template-columns:repeat(2,1fr)}
   .ms-grid{grid-template-columns:repeat(2,1fr)}
@@ -283,6 +366,11 @@ select{
   .manual-row .field:last-of-type{max-width:none!important}
   .shared-card{grid-template-columns:1fr;gap:8px}
   .shared-gap-col{text-align:left;padding:4px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  /* Toolbar: give actions their own full-width row so nothing clips off-screen */
+  .filter-right{width:100%}
+  .ms-status{width:100%;justify-content:space-between}
+  .ms-actions{width:100%}
+  .ms-actions .export-btn{flex:1}
 }
 @media(max-width:380px){.ms-grid{grid-template-columns:1fr}}
 </style>
@@ -291,7 +379,8 @@ select{
 
 <header class="site-header">
   <div class="container">
-    <h1>Milestone Age Calculator</h1>
+    <span class="hero-eyebrow"><i data-lucide="hourglass"></i> Your life, measured in milestones</span>
+    <h1><span class="hero-title-grad">Milestone Age</span> Calculator</h1>
   </div>
 </header>
 
@@ -304,12 +393,25 @@ select{
         <div class="card-title" id="calc-heading">Your Details</div>
         <div class="form-row">
           <div class="field">
-            <label for="dob-input">Date of birth</label>
-            <input type="date" id="dob-input" autocomplete="bday" aria-required="true">
+            <label for="dob-month">Date of birth</label>
+            <div class="dob-row">
+              <select id="dob-month" aria-label="Birth month" title="Month"></select>
+              <select id="dob-day" aria-label="Birth day" title="Day"></select>
+              <select id="dob-year" aria-label="Birth year" title="Year"></select>
+            </div>
           </div>
           <div class="field">
-            <label for="time-input">Time of birth <span class="opt">(optional)</span></label>
-            <input type="time" id="time-input" step="1">
+            <label for="time-hour">Time of birth <span class="opt">(optional)</span></label>
+            <div class="time-row">
+              <select id="time-hour" aria-label="Hour of birth" title="Hour"></select>
+              <span class="time-colon" aria-hidden="true">:</span>
+              <select id="time-min" aria-label="Minute of birth" title="Minute"></select>
+              <select id="time-ampm" aria-label="AM or PM" title="AM or PM">
+                <option value="" disabled selected>—</option>
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
             <span class="assumed-badge hidden" id="assumed-badge" aria-live="polite">
               <i data-lucide="info" style="width:11px;height:11px"></i>
               Assuming 12:00:00 PM
@@ -354,7 +456,29 @@ select{
           <button class="tab" data-filter="years"             role="tab" aria-selected="false">Years</button>
           <button class="tab" data-filter="heartbeats"        role="tab" aria-selected="false">Heartbeats</button>
         </div>
-        <span class="ms-count" id="ms-count" aria-live="polite"></span>
+        <div class="filter-right">
+          <div class="ms-status">
+            <button class="past-toggle" id="past-toggle" role="switch" aria-checked="true" title="Show or hide milestones you've already passed">
+              <i data-lucide="eye-off" style="width:14px;height:14px"></i>
+              <span id="past-toggle-label">Passed hidden</span>
+            </button>
+            <span class="ms-count" id="ms-count" aria-live="polite"></span>
+          </div>
+          <div class="ms-actions">
+            <button class="export-btn" id="export-btn" title="Export all milestones to Excel">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Export Excel</span>
+            </button>
+            <button class="export-btn" id="infographic-btn" title="Download a shareable infographic">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
+              </svg>
+              <span>Infographic</span>
+            </button>
+          </div>
+        </div>
       </div>
       <div class="ms-grid" id="ms-grid" role="list"></div>
     </section>
@@ -533,7 +657,6 @@ const FIGURES = [
   { age:35, name:'Buddha',                  deed:'achieved enlightenment' },
   { age:36, name:'Vincent van Gogh',        deed:'painted "The Starry Night"' },
   { age:39, name:'Neil Armstrong',          deed:'became the first person to walk on the Moon' },
-  { age:41, name:'Maya Angelou',            deed:'published "I Know Why the Caged Bird Sings"' },
   { age:43, name:'John F. Kennedy',         deed:'became U.S. President' },
   { age:44, name:'Barack Obama',            deed:'was elected to the U.S. Senate' },
   { age:46, name:'Stephen Hawking',         deed:'published "A Brief History of Time"' },
@@ -549,6 +672,31 @@ const FIGURES = [
   { age:71, name:'Nelson Mandela',          deed:'was released from prison' },
   { age:76, name:'Grandma Moses',           deed:'began her career as a painter' },
   { age:88, name:'Michelangelo',            deed:'was still designing St. Peter\'s Basilica' },
+
+  // ── Ancient world ──
+  { age:24, name:'Ramesses the Great',      deed:'ascended the throne as pharaoh of Egypt' },
+  { age:29, name:'Hannibal',                deed:'marched his army and war elephants over the Alps to strike at Rome' },
+  { age:33, name:'Scipio Africanus',        deed:'defeated Hannibal at the Battle of Zama' },
+  { age:36, name:'Augustus',                deed:'became the first emperor of Rome' },
+  { age:38, name:'Qin Shi Huang',           deed:'unified the warring states as China\'s first emperor' },
+  { age:40, name:'Eratosthenes',            deed:'calculated the Earth\'s circumference using only shadows and geometry' },
+  { age:45, name:'Julius Caesar',           deed:'was appointed dictator of Rome' },
+  { age:60, name:'Leonidas of Sparta',      deed:'made his last stand with 300 Spartans at Thermopylae' },
+
+  // ── Medieval world ──
+  { age:15, name:'Eleanor of Aquitaine',    deed:'became Queen of France, then later Queen of England' },
+  { age:17, name:'Marco Polo',              deed:'set out along the Silk Road on his journey to the East' },
+  { age:18, name:'Avicenna',                deed:'had become a celebrated physician and polymath of the Islamic Golden Age' },
+  { age:21, name:'Ibn Battuta',             deed:'set off on a 30-year journey across the medieval world' },
+  { age:30, name:'Leif Erikson',            deed:'reached North America, five centuries before Columbus' },
+  { age:43, name:'Filippo Brunelleschi',    deed:'began raising the impossible dome of Florence Cathedral' },
+  { age:43, name:'Dante Alighieri',         deed:'began writing "The Divine Comedy"' },
+  { age:44, name:'Genghis Khan',            deed:'united the Mongol tribes and was proclaimed Great Khan' },
+  { age:45, name:'Justinian the Great',     deed:'became Byzantine emperor and set out to codify Roman law' },
+  { age:50, name:'Saladin',                 deed:'recaptured Jerusalem during the Crusades' },
+  { age:52, name:'Charlemagne',             deed:'was crowned the first Holy Roman Emperor' },
+  { age:55, name:'Johannes Gutenberg',      deed:'printed Europe\'s first books with movable type' },
+  { age:66, name:'Wu Zetian',               deed:'became the only woman ever to rule China as emperor in her own right' },
 ];
 
 const ANIMALS = [
@@ -617,6 +765,10 @@ const ANIMALS = [
 
 const DEFS = [
   // Seconds
+  // Seconds
+  { unit:'seconds',    value:11_111_111,    label:'11,111,111 seconds',       novelty:true },
+  { unit:'seconds',    value:111_111_111,   label:'111,111,111 seconds',      novelty:true },
+  { unit:'seconds',    value:123_456_789,   label:'123,456,789 seconds',      novelty:true },
   { unit:'seconds',    value:1_000,          label:'1,000 seconds' },
   { unit:'seconds',    value:10_000,         label:'10,000 seconds' },
   { unit:'seconds',    value:100_000,        label:'100,000 seconds' },
@@ -624,10 +776,16 @@ const DEFS = [
   { unit:'seconds',    value:10_000_000,     label:'10 million seconds' },
   { unit:'seconds',    value:100_000_000,    label:'100 million seconds' },
   { unit:'seconds',    value:1_000_000_000,  label:'1 billion seconds' },
-  { unit:'seconds',    value:1_234_567_890,  label:'1,234,567,890 seconds', novelty:true },
-  { unit:'seconds',    value:PHI * 1e9,      label:'φ × 10⁹ seconds',       novelty:true },
-  { unit:'seconds',    value:Math.PI * 1e9,  label:'π × 10⁹ seconds',       novelty:true },
+  { unit:'seconds',    value:1_234_567_890,  label:'1,234,567,890 seconds',   novelty:true },
+  { unit:'seconds',    value:PHI * 1e9,      label:'φ × 10⁹ seconds',         novelty:true },
+  { unit:'seconds',    value:Math.PI * 1e9,  label:'π × 10⁹ seconds',         novelty:true },
   // Minutes
+  { unit:'minutes',    value:1_234,          label:'1,234 minutes',            novelty:true },
+  { unit:'minutes',    value:12_345,         label:'12,345 minutes',           novelty:true },
+  { unit:'minutes',    value:111_111,        label:'111,111 minutes',          novelty:true },
+  { unit:'minutes',    value:123_456,        label:'123,456 minutes',          novelty:true },
+  { unit:'minutes',    value:1_111_111,      label:'1,111,111 minutes',        novelty:true },
+  { unit:'minutes',    value:1_234_567,      label:'1,234,567 minutes',        novelty:true },
   { unit:'minutes',    value:1_000,          label:'1,000 minutes' },
   { unit:'minutes',    value:10_000,         label:'10,000 minutes' },
   { unit:'minutes',    value:100_000,        label:'100,000 minutes' },
@@ -635,24 +793,63 @@ const DEFS = [
   { unit:'minutes',    value:10_000_000,     label:'10 million minutes' },
   { unit:'minutes',    value:50_000_000,     label:'50 million minutes' },
   // Hours
+  { unit:'hours',      value:1_234,          label:'1,234 hours',              novelty:true },
+  { unit:'hours',      value:11_111,         label:'11,111 hours',             novelty:true },
+  { unit:'hours',      value:12_345,         label:'12,345 hours',             novelty:true },
+  { unit:'hours',      value:111_111,        label:'111,111 hours',            novelty:true },
   { unit:'hours',      value:1_000,          label:'1,000 hours' },
   { unit:'hours',      value:10_000,         label:'10,000 hours' },
   { unit:'hours',      value:100_000,        label:'100,000 hours' },
   { unit:'hours',      value:500_000,        label:'500,000 hours' },
   { unit:'hours',      value:1_000_000,      label:'1 million hours' },
   // Days
+  { unit:'days',       value:1_234,          label:'1,234 days',               novelty:true },
+  { unit:'days',       value:2_345,          label:'2,345 days',               novelty:true },
+  { unit:'days',       value:3_456,          label:'3,456 days',               novelty:true },
+  { unit:'days',       value:4_567,          label:'4,567 days',               novelty:true },
+  { unit:'days',       value:5_678,          label:'5,678 days',               novelty:true },
+  { unit:'days',       value:6_789,          label:'6,789 days',               novelty:true },
+  { unit:'days',       value:7_890,          label:'7,890 days',               novelty:true },
+  { unit:'days',       value:8_901,          label:'8,901 days',               novelty:true },
+  { unit:'days',       value:9_012,          label:'9,012 days',               novelty:true },
+  { unit:'days',       value:11_111,         label:'11,111 days',              novelty:true },
+  { unit:'days',       value:12_345,         label:'12,345 days',              novelty:true },
+  { unit:'days',       value:22_222,         label:'22,222 days',              novelty:true },
+  { unit:'days',       value:33_333,         label:'33,333 days',              novelty:true },
   { unit:'days',       value:1_000,          label:'1,000 days' },
   { unit:'days',       value:5_000,          label:'5,000 days' },
   { unit:'days',       value:10_000,         label:'10,000 days' },
   { unit:'days',       value:25_000,         label:'25,000 days' },
   { unit:'days',       value:40_000,         label:'40,000 days' },
   // Weeks
+  { unit:'weeks',      value:123,            label:'123 weeks',                novelty:true },
+  { unit:'weeks',      value:1_111,          label:'1,111 weeks',              novelty:true },
+  { unit:'weeks',      value:1_234,          label:'1,234 weeks',              novelty:true },
+  { unit:'weeks',      value:2_222,          label:'2,222 weeks',              novelty:true },
+  { unit:'weeks',      value:2_345,          label:'2,345 weeks',              novelty:true },
+  { unit:'weeks',      value:3_333,          label:'3,333 weeks',              novelty:true },
+  { unit:'weeks',      value:3_456,          label:'3,456 weeks',              novelty:true },
+  { unit:'weeks',      value:4_444,          label:'4,444 weeks',              novelty:true },
+  { unit:'weeks',      value:4_567,          label:'4,567 weeks',              novelty:true },
+  { unit:'weeks',      value:5_678,          label:'5,678 weeks',              novelty:true },
   { unit:'weeks',      value:100,            label:'100 weeks' },
   { unit:'weeks',      value:500,            label:'500 weeks' },
   { unit:'weeks',      value:1_000,          label:'1,000 weeks' },
   { unit:'weeks',      value:2_500,          label:'2,500 weeks' },
   { unit:'weeks',      value:5_000,          label:'5,000 weeks' },
   // Months
+  { unit:'months',     value:111,            label:'111 months',               novelty:true },
+  { unit:'months',     value:123,            label:'123 months',               novelty:true },
+  { unit:'months',     value:222,            label:'222 months',               novelty:true },
+  { unit:'months',     value:333,            label:'333 months',               novelty:true },
+  { unit:'months',     value:444,            label:'444 months',               novelty:true },
+  { unit:'months',     value:555,            label:'555 months',               novelty:true },
+  { unit:'months',     value:666,            label:'666 months',               novelty:true },
+  { unit:'months',     value:777,            label:'777 months',               novelty:true },
+  { unit:'months',     value:888,            label:'888 months',               novelty:true },
+  { unit:'months',     value:999,            label:'999 months',               novelty:true },
+  { unit:'months',     value:1_111,          label:'1,111 months',             novelty:true },
+  { unit:'months',     value:1_234,          label:'1,234 months',             novelty:true },
   { unit:'months',     value:6,              label:'6 months' },
   { unit:'months',     value:12,             label:'12 months' },
   { unit:'months',     value:24,             label:'24 months' },
@@ -680,12 +877,17 @@ const DEFS = [
   { unit:'years',      value:100,            label:'100 years' },
   { unit:'years',      value:110,            label:'110 years' },
   // Heartbeats (~70 bpm)
+  { unit:'heartbeats', value:111_111_111,    label:'111,111,111 heartbeats',   novelty:true },
+  { unit:'heartbeats', value:123_456_789,    label:'123,456,789 heartbeats',   novelty:true },
   { unit:'heartbeats', value:100_000_000,    label:'100 million heartbeats' },
   { unit:'heartbeats', value:500_000_000,    label:'500 million heartbeats' },
-  { unit:'heartbeats', value:1_000_000_000,  label:'1 billion heartbeats',   novelty:true },
+  { unit:'heartbeats', value:1_000_000_000,  label:'1 billion heartbeats',     novelty:true },
+  { unit:'heartbeats', value:1_111_111_111,  label:'1,111,111,111 heartbeats', novelty:true },
+  { unit:'heartbeats', value:1_234_567_890,  label:'1,234,567,890 heartbeats', novelty:true },
   { unit:'heartbeats', value:1_500_000_000,  label:'1.5 billion heartbeats' },
   { unit:'heartbeats', value:2_000_000_000,  label:'2 billion heartbeats' },
-  { unit:'heartbeats', value:2_500_000_000,  label:'2.5 billion heartbeats', novelty:true },
+  { unit:'heartbeats', value:2_222_222_222,  label:'2,222,222,222 heartbeats', novelty:true },
+  { unit:'heartbeats', value:2_500_000_000,  label:'2.5 billion heartbeats',   novelty:true },
   { unit:'heartbeats', value:3_000_000_000,  label:'3 billion heartbeats' },
 ];
 
@@ -696,6 +898,7 @@ const S = window.S = {
   timeProvided: false,
   tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
   filter: 'all',
+  hidePast: true,
   highlightId: null,
   milestones: [],
   tick: null,
@@ -743,19 +946,48 @@ function fmtAgo(date, now) {
 
 // ── Timezone selector ───────────────────────────────────────────────────────
 
+// A short, curated list of common timezones with friendly labels — far easier
+// to scan than the full ~400-zone IANA list. The visitor's detected local zone
+// is always pinned at the top so it's selected by default.
+const TZ_LIST = [
+  ['Pacific/Honolulu',    'Hawaii (HST)'],
+  ['America/Anchorage',   'Alaska (AKST)'],
+  ['America/Los_Angeles', 'Pacific Time — US & Canada (PT)'],
+  ['America/Denver',      'Mountain Time — US & Canada (MT)'],
+  ['America/Chicago',     'Central Time — US & Canada (CT)'],
+  ['America/New_York',    'Eastern Time — US & Canada (ET)'],
+  ['America/Sao_Paulo',   'São Paulo / Brazil (BRT)'],
+  ['UTC',                 'UTC'],
+  ['Europe/London',       'London / Dublin (GMT/BST)'],
+  ['Europe/Paris',        'Central Europe — Paris, Berlin (CET)'],
+  ['Europe/Athens',       'Eastern Europe — Athens, Cairo (EET)'],
+  ['Europe/Moscow',       'Moscow (MSK)'],
+  ['Asia/Dubai',          'Dubai (GST)'],
+  ['Asia/Kolkata',        'India (IST)'],
+  ['Asia/Shanghai',       'China — Beijing, Shanghai (CST)'],
+  ['Asia/Tokyo',          'Japan / Korea (JST)'],
+  ['Australia/Sydney',    'Sydney / Melbourne (AEST)'],
+  ['Pacific/Auckland',    'New Zealand (NZST)'],
+];
+
 function populateTZ() {
   const sel  = $('tz-select');
   const here = S.tz;
-  const zones = Intl.supportedValuesOf
-    ? Intl.supportedValuesOf('timeZone')
-    : ['UTC','America/New_York','America/Chicago','America/Denver',
-       'America/Los_Angeles','America/Sao_Paulo','Europe/London',
-       'Europe/Paris','Europe/Berlin','Asia/Kolkata','Asia/Tokyo','Australia/Sydney'];
   const frag = document.createDocumentFragment();
-  [here, ...zones.filter(z => z !== here)].forEach(tz => {
+
+  // Pin the detected local zone at the top (unless it's already UTC).
+  const known = TZ_LIST.some(([z]) => z === here);
+  if (here && !known) {
     const o = document.createElement('option');
-    o.value = tz; o.textContent = tz.replace(/_/g, ' ');
-    if (tz === here) o.selected = true;
+    o.value = here; o.textContent = `${here.replace(/_/g, ' ')} (your location)`;
+    o.selected = true;
+    frag.appendChild(o);
+  }
+
+  TZ_LIST.forEach(([zone, label]) => {
+    const o = document.createElement('option');
+    o.value = zone; o.textContent = label;
+    if (zone === here) o.selected = true;
     frag.appendChild(o);
   });
   sel.appendChild(frag);
@@ -1036,11 +1268,14 @@ function makeCard(m, now) {
 function renderMilestones() {
   const grid = $('ms-grid');
   const now  = DateTime.now().setZone(S.tz);
-  const list = S.filter === 'all' ? S.milestones : S.milestones.filter(m => m.unit === S.filter);
+  let list = S.filter === 'all' ? S.milestones : S.milestones.filter(m => m.unit === S.filter);
+  if (S.hidePast) list = list.filter(m => m.date > now);
 
   grid.innerHTML = '';
   if (!list.length) {
-    grid.innerHTML = '<p class="empty">No milestones in this category within the 110-year cap.</p>';
+    grid.innerHTML = S.hidePast
+      ? '<p class="empty">No upcoming milestones here — toggle “Passed hidden” to see ones you’ve already reached.</p>'
+      : '<p class="empty">No milestones in this category within the 110-year cap.</p>';
     return;
   }
   const frag = document.createDocumentFragment();
@@ -1050,7 +1285,9 @@ function renderMilestones() {
 
   const total    = S.milestones.length;
   const upcoming = S.milestones.filter(m => m.date > now).length;
-  $('ms-count').textContent = `${fmtN(upcoming)} upcoming · ${fmtN(total - upcoming)} past`;
+  $('ms-count').textContent = S.hidePast
+    ? `${fmtN(upcoming)} upcoming`
+    : `${fmtN(upcoming)} upcoming · ${fmtN(total - upcoming)} past`;
 }
 
 // ── Shared milestone finder ─────────────────────────────────────────────────
@@ -1213,11 +1450,9 @@ function applyDOB(dobStr, timeStr, timeType, tz) {
   renderHistory();
   renderFigures();
   renderAnimals();
+  if (window.MilestoneNotifications) window.MilestoneNotifications.schedule(S.milestones);
   startTick();
   pushUrl();
-
-  // Schedule milestone alerts on the device (native app only; no-op on web).
-  if (window.MilestoneNotifications) window.MilestoneNotifications.schedule(S.milestones);
 
   if (S.highlightId) {
     setTimeout(() => {
@@ -1232,18 +1467,117 @@ function applyDOB(dobStr, timeStr, timeType, tz) {
 function init() {
   populateTZ();
   lucide.createIcons();
-  $('dob-input').max = DateTime.now().toFormat('yyyy-MM-dd');
   $('shared-dob-a').max = $('shared-dob-b').max = DateTime.now().toFormat('yyyy-MM-dd');
 
+  // ── Date selector (month / day / year dropdowns) ──
+  // Three plain dropdowns are far more intuitive than the native date picker,
+  // and consistent with the time selector below.
+  const MONTHS = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+  const nowYear = DateTime.now().year;
+  const monthSel = $('dob-month'), daySel = $('dob-day'), yearSel = $('dob-year');
+
+  function placeholder(text) {
+    const o = document.createElement('option');
+    o.value = ''; o.textContent = text; o.disabled = true; o.selected = true;
+    return o;
+  }
+  function addOption(sel, value, label) {
+    const o = document.createElement('option');
+    o.value = String(value); o.textContent = label;
+    sel.appendChild(o);
+  }
+
+  monthSel.appendChild(placeholder('Month'));
+  MONTHS.forEach((name, i) => addOption(monthSel, i + 1, name));
+  yearSel.appendChild(placeholder('Year'));
+  for (let y = nowYear; y >= 1900; y--) addOption(yearSel, y, y);
+
+  // Rebuild the day list to match the chosen month/year (28–31 days), keeping
+  // the current selection if it's still valid.
+  function rebuildDays() {
+    const m = parseInt(monthSel.value, 10);
+    const y = parseInt(yearSel.value, 10);
+    const prev = daySel.value;
+    const count = (m && y) ? DateTime.local(y, m).daysInMonth
+                : m ? DateTime.local(2000, m).daysInMonth : 31;
+    daySel.innerHTML = '';
+    daySel.appendChild(placeholder('Day'));
+    for (let d = 1; d <= count; d++) addOption(daySel, d, d);
+    if (prev && parseInt(prev, 10) <= count) daySel.value = prev;
+  }
+  rebuildDays();
+
+  // Returns a valid "yyyy-MM-dd" string, or '' if incomplete or in the future.
+  function getDateValue() {
+    const m = monthSel.value, d = daySel.value, y = yearSel.value;
+    if (!m || !d || !y) return '';
+    const dt = DateTime.local(+y, +m, +d);
+    if (!dt.isValid || dt > DateTime.now().endOf('day')) return '';
+    return dt.toFormat('yyyy-MM-dd');
+  }
+
+  // Populates the three selectors from a "yyyy-MM-dd" string.
+  function setDateSelectors(ymd) {
+    if (!ymd) return;
+    const [y, m, d] = ymd.split('-');
+    yearSel.value  = String(+y);
+    monthSel.value = String(+m);
+    rebuildDays();
+    daySel.value   = String(+d);
+  }
+
+  // ── Clock selector (hour / minute / AM-PM) ──
+  const hourSel = $('time-hour'), minSel = $('time-min'), ampmSel = $('time-ampm');
+  const hph = document.createElement('option');
+  hph.value = ''; hph.textContent = 'Hr'; hph.disabled = true; hph.selected = true;
+  hourSel.appendChild(hph);
+  for (let h = 1; h <= 12; h++) {
+    const o = document.createElement('option');
+    o.value = String(h); o.textContent = String(h);
+    hourSel.appendChild(o);
+  }
+  const mph = document.createElement('option');
+  mph.value = ''; mph.textContent = 'Min'; mph.disabled = true; mph.selected = true;
+  minSel.appendChild(mph);
+  for (let m = 0; m < 60; m++) {
+    const o = document.createElement('option');
+    o.value = String(m); o.textContent = pad(m);
+    minSel.appendChild(o);
+  }
+
+  // Returns a 24-hour "HH:mm:00" string, or '' if the time is incomplete.
+  function getTimeValue() {
+    const h = hourSel.value, m = minSel.value, ap = ampmSel.value;
+    if (h === '' || m === '' || ap === '') return '';
+    let hh = parseInt(h, 10) % 12;
+    if (ap === 'PM') hh += 12;
+    return `${pad(hh)}:${pad(parseInt(m, 10))}:00`;
+  }
+
+  // Populates the three selectors from an "HH:mm[:ss]" 24-hour string.
+  function setTimeSelectors(hhmmss) {
+    if (!hhmmss) return;
+    const [hStr, mStr] = hhmmss.split(':');
+    let hh = parseInt(hStr, 10);
+    const ap = hh >= 12 ? 'PM' : 'AM';
+    let h12 = hh % 12; if (h12 === 0) h12 = 12;
+    hourSel.value = String(h12);
+    minSel.value  = String(parseInt(mStr, 10));
+    ampmSel.value = ap;
+  }
+
   function recalc() {
-    const dob  = $('dob-input').value;
-    const time = $('time-input').value;
+    const dob  = getDateValue();
+    const time = getTimeValue();
     const tz   = $('tz-select').value;
     if (dob) applyDOB(dob, time || null, time ? 'exact' : 'assumed', tz);
   }
 
-  $('dob-input').addEventListener('change', recalc);
-  $('time-input').addEventListener('change', recalc);
+  // Month/year changes can alter how many days exist, so rebuild before calc.
+  [monthSel, yearSel].forEach(el => el.addEventListener('change', () => { rebuildDays(); recalc(); }));
+  daySel.addEventListener('change', recalc);
+  [hourSel, minSel, ampmSel].forEach(el => el.addEventListener('change', recalc));
   $('tz-select').addEventListener('change', () => { S.tz = $('tz-select').value; recalc(); });
 
   $('filter-tabs').addEventListener('click', e => {
@@ -1255,6 +1589,18 @@ function init() {
     renderMilestones();
   });
 
+  // Toggle for hiding/showing milestones already passed (hidden by default).
+  $('past-toggle').addEventListener('click', () => {
+    S.hidePast = !S.hidePast;
+    const btn = $('past-toggle');
+    btn.classList.toggle('showing', !S.hidePast);
+    btn.setAttribute('aria-checked', String(S.hidePast));
+    btn.querySelector('i').setAttribute('data-lucide', S.hidePast ? 'eye-off' : 'eye');
+    $('past-toggle-label').textContent = S.hidePast ? 'Passed hidden' : 'Showing all';
+    lucide.createIcons();
+    renderMilestones();
+  });
+
   $('manual-btn').addEventListener('click', calcManual);
   $('manual-val').addEventListener('keydown', e => { if (e.key === 'Enter') calcManual(); });
   $('shared-btn').addEventListener('click', runShared);
@@ -1262,8 +1608,8 @@ function init() {
   // Pre-populate from URL
   const { dob, time, timeType, tz, highlight } = parseUrl();
   if (dob) {
-    $('dob-input').value = dob;
-    if (time && timeType === 'exact') $('time-input').value = time;
+    setDateSelectors(dob);
+    if (time && timeType === 'exact') setTimeSelectors(time);
     if (tz) { const opt = Array.from($('tz-select').options).find(o => o.value === tz); if (opt) opt.selected = true; }
     S.highlightId = highlight;
     applyDOB(dob, (time && timeType === 'exact') ? time : null, timeType || 'assumed', tz);
@@ -1271,6 +1617,403 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+  // ── Excel export ───────────────────────────────────────────────────────────
+
+  function exportToExcel() {
+    if (!S.milestones || !S.milestones.length || !S.dob) return;
+
+    const now  = DateTime.now().setZone(S.tz);
+    const rows = S.milestones.map(m => {
+      const past      = m.date < now;
+      const diffMs    = Math.abs(m.date.toMillis() - now.toMillis());
+      const diffDays  = Math.round(diffMs / 86400000);
+      const status    = past
+        ? `${diffDays.toLocaleString('en-US')} days ago`
+        : diffDays === 0 ? 'Today!'
+        : `In ${diffDays.toLocaleString('en-US')} days`;
+      return [
+        m.label,
+        m.unit.charAt(0).toUpperCase() + m.unit.slice(1),
+        m.date.toFormat('MMMM d, yyyy'),
+        m.date.toFormat('h:mm a ZZZZ'),
+        past ? 'Past' : 'Upcoming',
+        status,
+      ];
+    });
+
+    const dobStr  = S.dob.toFormat('MMMM d, yyyy');
+    const genStr  = now.toFormat("MMMM d, yyyy 'at' h:mm a");
+
+    function esc(v) {
+      return String(v)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
+    }
+
+    const cell = (txt, style) =>
+      `<Cell${style ? ` ss:StyleID="${style}"` : ''}><Data ss:Type="String">${esc(txt)}</Data></Cell>`;
+
+    // Each data row picks styles by parity (for striping) and by status.
+    const dataRows = rows.map((r, i) => {
+      const p    = i % 2;                       // 0 = darker, 1 = lighter stripe
+      const isUp = r[4] === 'Upcoming';
+      const cells = [
+        cell(r[0], `label${p}`),                // Milestone (accent, bold)
+        cell(r[1], `unit${p}`),                 // Unit (violet)
+        cell(r[2], `data${p}`),                 // Date
+        cell(r[3], `data${p}`),                 // Time
+        cell(r[4], (isUp ? 'up' : 'past') + p), // Status (colour-coded)
+        cell(r[5], `data${p}`),                 // Relative
+      ].join('');
+      return `<Row ss:Height="22">${cells}</Row>`;
+    }).join('\n  ');
+
+    // ── Style palette: dark base + violet accents ──
+    const C = {
+      titleBg:'#0F0F11', titleTx:'#8B8BFF',
+      metaBg:'#15151B',  metaTx:'#8A8D98',
+      headBg:'#5E6AD2',  headTx:'#FFFFFF',
+      rowA:'#16161D',    rowB:'#1E1E28',        // alternating stripes
+      text:'#E8E9ED',    accent:'#8B8BFF',      muted:'#6B6F7A',
+      border:'#2A2A35',
+    };
+    const border =
+      `<Borders>` +
+      `<Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="${C.border}"/>` +
+      `<Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="${C.border}"/>` +
+      `</Borders>`;
+    const fill = c => `<Interior ss:Color="${c}" ss:Pattern="Solid"/>`;
+    const font = (c, opts = '') => `<Font ss:FontName="Calibri" ss:Size="11" ss:Color="${c}"${opts}/>`;
+    const alignL = `<Alignment ss:Vertical="Center" ss:Horizontal="Left"/>`;
+    const alignC = `<Alignment ss:Vertical="Center" ss:Horizontal="Center"/>`;
+
+    const dataStyle = (id, bg, fnt, align = alignL) =>
+      `<Style ss:ID="${id}">${align}${fnt}${fill(bg)}${border}</Style>`;
+
+    const styles = [
+      // Title + meta
+      `<Style ss:ID="title"><Alignment ss:Vertical="Center" ss:Horizontal="Left"/>` +
+        `<Font ss:FontName="Calibri" ss:Size="20" ss:Bold="1" ss:Color="${C.titleTx}"/>${fill(C.titleBg)}</Style>`,
+      `<Style ss:ID="meta"><Alignment ss:Vertical="Center"/>` +
+        `<Font ss:FontName="Calibri" ss:Size="10" ss:Italic="1" ss:Color="${C.metaTx}"/>${fill(C.metaBg)}</Style>`,
+      `<Style ss:ID="spacer">${fill(C.titleBg)}</Style>`,
+      // Header
+      `<Style ss:ID="head"><Alignment ss:Vertical="Center" ss:Horizontal="Left"/>` +
+        `<Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="${C.headTx}"/>${fill(C.headBg)}` +
+        `<Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2" ss:Color="#3D49B5"/></Borders></Style>`,
+      // Data — two stripe parities
+      dataStyle('data0', C.rowA, font(C.text)),
+      dataStyle('data1', C.rowB, font(C.text)),
+      dataStyle('label0', C.rowA, font('#FFFFFF', ' ss:Bold="1"')),
+      dataStyle('label1', C.rowB, font('#FFFFFF', ' ss:Bold="1"')),
+      dataStyle('unit0', C.rowA, font(C.accent), alignC),
+      dataStyle('unit1', C.rowB, font(C.accent), alignC),
+      dataStyle('up0', C.rowA, font(C.accent, ' ss:Bold="1"'), alignC),
+      dataStyle('up1', C.rowB, font(C.accent, ' ss:Bold="1"'), alignC),
+      dataStyle('past0', C.rowA, font(C.muted), alignC),
+      dataStyle('past1', C.rowB, font(C.muted), alignC),
+    ].join('\n  ');
+
+    const headRow = `<Row ss:Height="26">` +
+      ['Milestone','Unit','Date','Time','Status','Relative'].map(h => cell(h, 'head')).join('') +
+      `</Row>`;
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:x="urn:schemas-microsoft-com:office:excel">
+<Styles>
+  ${styles}
+</Styles>
+<Worksheet ss:Name="Milestones">
+<Table ss:DefaultRowHeight="22">
+  <Column ss:Width="230"/>
+  <Column ss:Width="95"/>
+  <Column ss:Width="150"/>
+  <Column ss:Width="175"/>
+  <Column ss:Width="100"/>
+  <Column ss:Width="165"/>
+  <Row ss:Height="40"><Cell ss:StyleID="title" ss:MergeAcross="5"><Data ss:Type="String">MY AGE IN — MILESTONES</Data></Cell></Row>
+  <Row ss:Height="18"><Cell ss:StyleID="meta" ss:MergeAcross="5"><Data ss:Type="String">Born ${esc(dobStr)}</Data></Cell></Row>
+  <Row ss:Height="18"><Cell ss:StyleID="meta" ss:MergeAcross="5"><Data ss:Type="String">Generated ${esc(genStr)} · myagein.com</Data></Cell></Row>
+  <Row ss:Height="8"><Cell ss:StyleID="spacer" ss:MergeAcross="5"/></Row>
+  ${headRow}
+  ${dataRows}
+</Table>
+<WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+  <DoNotDisplayGridlines/>
+  <FreezePanes/>
+  <FrozenNoSplit/>
+  <SplitHorizontal>5</SplitHorizontal>
+  <TopRowBottomPane>5</TopRowBottomPane>
+  <ActivePane>2</ActivePane>
+</WorksheetOptions>
+</Worksheet>
+</Workbook>`;
+
+    const blob = new Blob([xml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `milestones-${S.dob.toFormat('yyyy-MM-dd')}.xls`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
+
+  $('export-btn').addEventListener('click', exportToExcel);
+
+  // ── Infographic export (canvas → PNG) ──────────────────────────────────────
+
+  // Set a font that shrinks until `text` fits within maxW (down to a floor).
+  function fitFont(ctx, text, maxW, baseSize, weight) {
+    let size = baseSize;
+    do {
+      ctx.font = `${weight} ${size}px Inter, sans-serif`;
+      if (ctx.measureText(text).width <= maxW) break;
+      size -= 2;
+    } while (size > 18);
+    return size;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y,     x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x,     y + h, r);
+    ctx.arcTo(x,     y + h, x,     y,     r);
+    ctx.arcTo(x,     y,     x + w, y,     r);
+    ctx.closePath();
+  }
+
+  const SYM = '"Segoe UI Symbol","Segoe UI Emoji","Apple Color Emoji",Inter,sans-serif';
+
+  async function buildInfographicCanvas() {
+    if (!S.dob) return null;
+    // Ensure web fonts are ready so canvas text uses Inter, not a fallback.
+    if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+
+    const W = 1080, P = 64, H = 1640;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const ctx = c.getContext('2d');
+
+    // ── Compute dynamic values ──
+    const now       = DateTime.now().setZone(S.tz);
+    const earthMs   = now.toMillis() - S.dob.toMillis();
+    const sec       = Math.floor(earthMs / 1000);
+    const days      = Math.floor(earthMs / 86400000);
+    const earthD    = earthMs / 86400000;
+    const userYears = now.diff(S.dob, 'years').years;
+    const fmt       = n => Math.floor(Math.abs(n)).toLocaleString('en-US');
+
+    const upcoming  = (S.milestones || []).filter(m => m.date > now).slice(0, 3);
+    const figures   = [...FIGURES]
+      .map(f => ({ ...f, diff: userYears - f.age }))
+      .sort((a, b) => Math.abs(a.diff) - Math.abs(b.diff))
+      .slice(0, 3)
+      .sort((a, b) => a.age - b.age);
+    const planets   = ['Mercury','Mars','Jupiter','Saturn','Neptune']
+      .map(nm => PLANETS.find(p => p.name === nm)).filter(Boolean);
+    const animals   = ['Dog (medium breed)','African elephant','Galápagos tortoise']
+      .map(nm => ANIMALS.find(a => a.name === nm)).filter(Boolean);
+
+    // ── Background: dark base + layered glows ──
+    ctx.fillStyle = '#0F0F11'; ctx.fillRect(0, 0, W, H);
+    const addGlow = (cx, cy, r, c0, c1) => {
+      const g = ctx.createRadialGradient(cx, cy, 40, cx, cy, r);
+      g.addColorStop(0, c0); g.addColorStop(1, c1);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    };
+    addGlow(W / 2, -120, 900, 'rgba(94,106,210,0.55)', 'rgba(94,106,210,0)');
+    addGlow(W * 0.88, H * 0.42, 720, 'rgba(167,139,250,0.16)', 'rgba(167,139,250,0)');
+    addGlow(W / 2, H + 80, 720, 'rgba(139,139,255,0.20)', 'rgba(139,139,255,0)');
+    // dotted texture behind header
+    ctx.fillStyle = 'rgba(94,106,210,0.12)';
+    for (let gy = 34; gy < 250; gy += 26)
+      for (let gx = 28; gx < W - 18; gx += 26) { ctx.beginPath(); ctx.arc(gx, gy, 1.4, 0, 7); ctx.fill(); }
+
+    // ── Helpers ──
+    const sectionHeader = (label, yy) => {
+      ctx.textAlign = 'left';
+      const grd = ctx.createLinearGradient(P, yy - 18, P, yy + 4);
+      grd.addColorStop(0, '#A78BFF'); grd.addColorStop(1, '#5E6AD2');
+      ctx.fillStyle = grd; roundRect(ctx, P, yy - 18, 5, 22, 2.5); ctx.fill();
+      ctx.fillStyle = '#8B8BFF'; ctx.font = '600 25px Inter, sans-serif';
+      ctx.fillText(label, P + 18, yy);
+      return yy + 32;
+    };
+    const cardBox = (x, yy, w, h, accent) => {
+      ctx.fillStyle = accent ? 'rgba(94,106,210,0.10)' : 'rgba(255,255,255,0.03)';
+      roundRect(ctx, x, yy, w, h, 16); ctx.fill();
+      ctx.strokeStyle = accent ? 'rgba(139,139,255,0.55)' : 'rgba(94,106,210,0.24)';
+      ctx.lineWidth = 1.5; roundRect(ctx, x, yy, w, h, 16); ctx.stroke();
+    };
+    // Render an emoji recolored as a violet gradient silhouette. Color emoji
+    // ignore fillStyle, so we draw the glyph to an offscreen canvas and use a
+    // 'source-in' composite to paint the gradient only where the glyph is.
+    const drawGradientEmoji = (emoji, cx, baseline, size) => {
+      const box = Math.ceil(size * 1.6);
+      const base = box * 0.8; // glyph baseline within the offscreen box
+      const tmp = document.createElement('canvas');
+      tmp.width = box; tmp.height = box;
+      const t = tmp.getContext('2d');
+      t.textAlign = 'center'; t.textBaseline = 'alphabetic';
+      t.font = `${size}px ${SYM}`;
+      t.fillText(emoji, box / 2, base);
+      const g = t.createLinearGradient(0, box * 0.12, 0, box * 0.92);
+      g.addColorStop(0, '#C4B5FD'); g.addColorStop(1, '#5E6AD2');
+      t.globalCompositeOperation = 'source-in';
+      t.fillStyle = g; t.fillRect(0, 0, box, box);
+      ctx.drawImage(tmp, cx - box / 2, baseline - base);
+    };
+
+    // ── Header ──
+    let y = 92;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#8B8BFF'; ctx.font = '600 25px Inter, sans-serif';
+    ctx.fillText('✦   MY MILESTONE REPORT   ✦', W / 2, y); y += 62;
+    ctx.fillStyle = '#F7F8F8'; ctx.font = '600 54px Inter, sans-serif';
+    ctx.fillText(`Born ${S.dob.toFormat('MMMM d, yyyy')}`, W / 2, y); y += 44;
+    ctx.fillStyle = '#A78BFF'; ctx.font = '500 28px Inter, sans-serif';
+    ctx.fillText(`${fmt(userYears)} years old  ·  ${fmt(days)} days lived`, W / 2, y);
+
+    // ── Age in numbers ──
+    y = sectionHeader('AGE IN NUMBERS', y + 56);
+    {
+      const nums = [
+        { v: fmt(days),                 u: 'DAYS' },
+        { v: fmt(earthMs / 3600000),    u: 'HOURS' },
+        { v: fmt(sec * BEATS_PER_SEC),  u: 'HEARTBEATS' },
+      ];
+      const gap = 18, cols = 3, cw = (W - P * 2 - gap * (cols - 1)) / cols, ch = 128;
+      nums.forEach((s, i) => {
+        const x = P + i * (cw + gap);
+        cardBox(x, y, cw, ch, true);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#F7F8F8'; fitFont(ctx, s.v, cw - 30, 46, '600');
+        ctx.fillText(s.v, x + cw / 2, y + 70);
+        ctx.fillStyle = '#8B8BFF'; ctx.font = '500 19px Inter, sans-serif';
+        ctx.fillText(s.u, x + cw / 2, y + 104);
+      });
+      y += ch;
+    }
+
+    // ── Next big milestones ──
+    y = sectionHeader('NEXT BIG MILESTONES', y + 42);
+    {
+      const rh = 76, gap = 12;
+      upcoming.forEach(m => {
+        cardBox(P, y, W - P * 2, rh, false);
+        ctx.textAlign = 'center'; ctx.fillStyle = '#A78BFF'; ctx.font = `28px ${SYM}`;
+        ctx.fillText(m.novelty ? '✦' : '⏱', P + 38, y + rh / 2 + 10);
+        ctx.textAlign = 'left'; ctx.fillStyle = '#F7F8F8';
+        fitFont(ctx, m.label, W - P * 2 - 340, 27, '600');
+        ctx.fillText(m.label, P + 72, y + 33);
+        ctx.fillStyle = '#6B6F7A'; ctx.font = '400 18px Inter, sans-serif';
+        ctx.fillText(m.date.toFormat('MMMM d, yyyy'), P + 72, y + 58);
+        const dd = Math.ceil((m.date.toMillis() - now.toMillis()) / 86400000);
+        ctx.textAlign = 'right'; ctx.fillStyle = '#8B8BFF'; ctx.font = '600 25px Inter, sans-serif';
+        ctx.fillText(`in ${fmt(dd)}`, W - P - 22, y + 33);
+        ctx.fillStyle = '#6B6F7A'; ctx.font = '400 17px Inter, sans-serif';
+        ctx.fillText('days', W - P - 22, y + 56);
+        y += rh + gap;
+      });
+    }
+
+    // ── At your age, they... (historic figures) ──
+    y = sectionHeader('AT YOUR AGE, THEY…', y + 30);
+    {
+      const rh = 100, gap = 12;
+      figures.forEach(f => {
+        const match = Math.abs(f.diff) < 0.5;
+        cardBox(P, y, W - P * 2, rh, match);
+        // age badge
+        ctx.fillStyle = match ? '#5E6AD2' : 'rgba(94,106,210,0.20)';
+        roundRect(ctx, P + 18, y + 20, 62, 60, 14); ctx.fill();
+        ctx.textAlign = 'center'; ctx.fillStyle = match ? '#fff' : '#8B8BFF'; ctx.font = '600 29px Inter, sans-serif';
+        ctx.fillText(String(f.age), P + 49, y + 58);
+        ctx.textAlign = 'left'; ctx.fillStyle = '#F7F8F8'; ctx.font = '600 25px Inter, sans-serif';
+        ctx.fillText(f.name, P + 100, y + 40);
+        ctx.fillStyle = '#9A9FAC'; fitFont(ctx, f.deed, W - P * 2 - 150, 20, '400');
+        ctx.fillText(f.deed, P + 100, y + 70);
+        const tag = match ? '◆ RIGHT NOW'
+          : f.diff > 0 ? `${Math.floor(f.diff)} YRS AGO` : `${Math.ceil(-f.diff)} YRS TO GO`;
+        ctx.textAlign = 'right'; ctx.fillStyle = match ? '#A78BFF' : '#6B6F7A'; ctx.font = '600 15px Inter, sans-serif';
+        ctx.fillText(tag, W - P - 22, y + 28);
+        y += rh + gap;
+      });
+    }
+
+    // ── Your age across the solar system ──
+    y = sectionHeader('YOUR AGE ACROSS THE SOLAR SYSTEM', y + 30);
+    {
+      const gap = 14, cols = planets.length, cw = (W - P * 2 - gap * (cols - 1)) / cols, ch = 130;
+      planets.forEach((p, i) => {
+        const x = P + i * (cw + gap), ageYrs = earthD / p.days;
+        cardBox(x, y, cw, ch, false);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#A78BFF'; ctx.font = `38px ${SYM}`;
+        ctx.fillText(p.sym, x + cw / 2, y + 50);
+        ctx.fillStyle = '#F7F8F8'; ctx.font = '600 25px Inter, sans-serif';
+        ctx.fillText(ageYrs < 10 ? ageYrs.toFixed(1) : fmt(ageYrs), x + cw / 2, y + 90);
+        ctx.fillStyle = '#6B6F7A'; ctx.font = '500 15px Inter, sans-serif';
+        ctx.fillText(p.name.toUpperCase(), x + cw / 2, y + 114);
+      });
+      y += ch;
+    }
+
+    // ── Lifetimes you've outlived (animals) ──
+    y = sectionHeader('LIFETIMES YOU’VE OUTLIVED', y + 42);
+    {
+      const gap = 14, cols = animals.length, cw = (W - P * 2 - gap * (cols - 1)) / cols, ch = 126;
+      animals.forEach((a, i) => {
+        const x = P + i * (cw + gap), mult = earthD / a.days;
+        cardBox(x, y, cw, ch, false);
+        ctx.textAlign = 'center';
+        drawGradientEmoji(a.emoji, x + cw / 2, y + 52, 40);
+        ctx.fillStyle = '#F7F8F8'; ctx.font = '600 26px Inter, sans-serif';
+        ctx.fillText(mult >= 100 ? fmt(mult) + '×' : mult.toFixed(1) + '×', x + cw / 2, y + 88);
+        ctx.fillStyle = '#6B6F7A'; ctx.font = '500 15px Inter, sans-serif';
+        ctx.fillText(a.name.replace(/\s*\(.*\)/, '').toUpperCase(), x + cw / 2, y + 112);
+      });
+      y += ch;
+    }
+
+    // ── Footer ──
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#8B8BFF'; ctx.font = '600 30px Inter, sans-serif';
+    ctx.fillText('myagein.com', W / 2, H - 48);
+    ctx.fillStyle = '#4A4A55'; ctx.font = '400 18px Inter, sans-serif';
+    ctx.fillText('Find the exact date you hit every milestone', W / 2, H - 20);
+
+    return c;
+  }
+
+  async function exportInfographic() {
+    const c = await buildInfographicCanvas();
+    if (!c) return;
+    // ── Download ──
+    c.toBlob(blob => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `my-age-infographic-${S.dob.toFormat('yyyy-MM-dd')}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    }, 'image/png');
+  }
+
+  $('infographic-btn').addEventListener('click', exportInfographic);
+  window.__buildInfographic = buildInfographicCanvas;
+
 })();
 </script>
 </body>
