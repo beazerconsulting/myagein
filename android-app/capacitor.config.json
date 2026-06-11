@@ -1,6 +1,6 @@
 {
-  "appId": "com.myagein.app",
-  "appName": "My Age In",
+  "appId": "com.agemilestone.app",
+  "appName": "Age Milestone",
   "webDir": "www",
   "plugins": {
     "LocalNotifications": {

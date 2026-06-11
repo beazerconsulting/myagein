@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://myagein.com/sitemap.xml
+Sitemap: https://agemilestone.com/sitemap.xml

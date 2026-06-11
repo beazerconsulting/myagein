@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">My Age In</string>
-    <string name="title_activity_main">My Age In</string>
-    <string name="package_name">com.myagein.app</string>
-    <string name="custom_url_scheme">com.myagein.app</string>
+    <string name="app_name">Age Milestone</string>
+    <string name="title_activity_main">Age Milestone</string>
+    <string name="package_name">com.agemilestone.app</string>
+    <string name="custom_url_scheme">com.agemilestone.app</string>
 </resources>
