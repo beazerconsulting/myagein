@@ -949,24 +949,18 @@ function fmtAgo(date, now) {
 // to scan than the full ~400-zone IANA list. The visitor's detected local zone
 // is always pinned at the top so it's selected by default.
 const TZ_LIST = [
-  ['Pacific/Honolulu',    'Hawaii (HST)'],
-  ['America/Anchorage',   'Alaska (AKST)'],
-  ['America/Los_Angeles', 'Pacific Time — US & Canada (PT)'],
-  ['America/Denver',      'Mountain Time — US & Canada (MT)'],
-  ['America/Chicago',     'Central Time — US & Canada (CT)'],
-  ['America/New_York',    'Eastern Time — US & Canada (ET)'],
-  ['America/Sao_Paulo',   'São Paulo / Brazil (BRT)'],
+  ['America/Los_Angeles', 'Pacific Time (PT)'],
+  ['America/Chicago',     'Central Time (CT)'],
+  ['America/New_York',    'Eastern Time (ET)'],
+  ['America/Sao_Paulo',   'Brazil (BRT)'],
   ['UTC',                 'UTC'],
-  ['Europe/London',       'London / Dublin (GMT/BST)'],
-  ['Europe/Paris',        'Central Europe — Paris, Berlin (CET)'],
-  ['Europe/Athens',       'Eastern Europe — Athens, Cairo (EET)'],
+  ['Europe/London',       'London (GMT)'],
+  ['Europe/Paris',        'Central Europe (CET)'],
   ['Europe/Moscow',       'Moscow (MSK)'],
-  ['Asia/Dubai',          'Dubai (GST)'],
   ['Asia/Kolkata',        'India (IST)'],
-  ['Asia/Shanghai',       'China — Beijing, Shanghai (CST)'],
-  ['Asia/Tokyo',          'Japan / Korea (JST)'],
-  ['Australia/Sydney',    'Sydney / Melbourne (AEST)'],
-  ['Pacific/Auckland',    'New Zealand (NZST)'],
+  ['Asia/Shanghai',       'China (CST)'],
+  ['Asia/Tokyo',          'Japan (JST)'],
+  ['Australia/Sydney',    'Australia (AEST)'],
 ];
 
 function populateTZ() {
