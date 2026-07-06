@@ -372,6 +372,16 @@ select{
   .ms-actions .export-btn{flex:1}
 }
 @media(max-width:380px){.ms-grid{grid-template-columns:1fr}}
+
+/* ── Scroll reveal (additive — does not alter existing rules) ───── */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+@keyframes revStagger{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.rv-stagger-item{animation:revStagger .5s cubic-bezier(.2,.7,.2,1) both}
+@media (prefers-reduced-motion: reduce){
+  .rv{opacity:1!important;transform:none!important;transition:none!important}
+  .rv-stagger-item{animation:none!important;opacity:1!important;transform:none!important}
+}
 </style>
 </head>
 <body>
@@ -427,7 +437,7 @@ select{
     </section>
 
     <!-- ── Current age ───────────────────────────── -->
-    <section id="age-section" class="hidden" aria-label="Your current age" aria-live="polite">
+    <section id="age-section" class="hidden rv" aria-label="Your current age" aria-live="polite">
       <div class="card-title">You are currently</div>
       <div class="age-grid" id="age-grid">
         <div class="age-cell"><span class="age-val" id="age-years">—</span><span class="age-unit">years</span></div>
@@ -442,7 +452,7 @@ select{
     </section>
 
     <!-- ── Milestones ────────────────────────────── -->
-    <section id="milestones-section" class="hidden" aria-label="Age milestones">
+    <section id="milestones-section" class="hidden rv" aria-label="Age milestones">
       <div class="filter-row">
         <div class="filter-tabs" role="tablist" id="filter-tabs">
           <button class="tab active" data-filter="all"        role="tab" aria-selected="true">All</button>
@@ -483,34 +493,34 @@ select{
     </section>
 
     <!-- ── Planet ages ───────────────────────────── -->
-    <section id="planet-section" class="hidden section-gap" aria-labelledby="planet-heading">
+    <section id="planet-section" class="hidden section-gap rv" aria-labelledby="planet-heading">
       <div class="card-title" id="planet-heading" style="margin-bottom:12px">Your Age on Other Planets</div>
       <div class="planet-grid" id="planet-grid"></div>
       <p class="planet-note">Based on each planet's orbital period around the Sun. Earth = 365.25 days.</p>
     </section>
 
     <!-- ── Historical context ────────────────────── -->
-    <section id="history-section" class="hidden section-gap" aria-labelledby="history-heading">
+    <section id="history-section" class="hidden section-gap rv" aria-labelledby="history-heading">
       <div class="card-title" id="history-heading" style="margin-bottom:12px">You and History</div>
       <div class="history-list" id="history-list"></div>
     </section>
 
     <!-- ── Historic figures ──────────────────────── -->
-    <section id="figures-section" class="hidden section-gap" aria-labelledby="figures-heading">
+    <section id="figures-section" class="hidden section-gap rv" aria-labelledby="figures-heading">
       <div class="card-title" id="figures-heading" style="margin-bottom:12px">By Your Age...</div>
       <div class="figures-list" id="figures-list"></div>
       <p class="planet-note">Notable accomplishments by historic figures, sorted by the age they achieved them.</p>
     </section>
 
     <!-- ── Animal lifetimes ──────────────────────── -->
-    <section id="animals-section" class="hidden section-gap" aria-labelledby="animals-heading">
+    <section id="animals-section" class="hidden section-gap rv" aria-labelledby="animals-heading">
       <div class="card-title" id="animals-heading" style="margin-bottom:12px">Animal Lifetimes Lived</div>
       <div class="animal-list" id="animal-list"></div>
       <p class="planet-note">Based on typical maximum lifespans. Sorted from shortest to longest.</p>
     </section>
 
     <!-- ── Manual entry ──────────────────────────── -->
-    <section id="manual-section" class="hidden section-gap" aria-labelledby="manual-heading">
+    <section id="manual-section" class="hidden section-gap rv" aria-labelledby="manual-heading">
       <div class="card">
         <div class="card-title" id="manual-heading">Look up any milestone</div>
         <div class="manual-row">
@@ -544,7 +554,7 @@ select{
     </section>
 
     <!-- ── Shared milestone finder ───────────────── -->
-    <section class="section-gap" aria-labelledby="shared-heading">
+    <section class="section-gap rv" aria-labelledby="shared-heading">
       <div class="card">
         <div class="card-title" id="shared-heading">Shared Milestone Finder</div>
         <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;font-weight:300">Find dates when two people hit round-number milestones within 30 days of each other — great for couples, siblings, or friends.</p>
@@ -2020,5 +2030,75 @@ document.addEventListener('DOMContentLoaded', init);
 
 })();
 </script>
+
+<script>
+// ── Scroll reveal layer ───────────────────────────────────────────────
+// Fully additive: does not touch the calculator engine above. Observes the
+// eight `.rv` sections (hidden until a DOB is submitted) and reveals each
+// with a fade/rise the first time it enters the viewport. Also runs a
+// one-time count-up on the age grid, and staggers the planet + history
+// list rows on their first render. Everything degrades to "just show it"
+// under prefers-reduced-motion or if IntersectionObserver is unavailable.
+(function () {
+  'use strict';
+  var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function revealAgeGrid() {
+    var ids = ['age-years','age-months','age-weeks','age-days','age-hours','age-minutes','age-seconds','age-beats'];
+    ids.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var target = parseInt(el.textContent.replace(/,/g, ''), 10);
+      if (isNaN(target)) return;
+      var start = performance.now();
+      var dur = 900;
+      (function frame(now) {
+        var p = Math.min((now - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased).toLocaleString('en-US');
+        if (p < 1) requestAnimationFrame(frame);
+        else el.textContent = target.toLocaleString('en-US');
+      })(start);
+    });
+  }
+
+  var rvEls = document.querySelectorAll('.rv');
+  if (reduced || !('IntersectionObserver' in window)) {
+    rvEls.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('in');
+        if (entry.target.id === 'age-section') revealAgeGrid();
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.2 });
+    rvEls.forEach(function (el) { io.observe(el); });
+  }
+
+  // Stagger entrance for the two short lists that fully re-render on each
+  // DOB submission (planet-grid: 7 cards, history-list: 13 rows). Longer
+  // lists (figures, animals) are left as a single reveal via their parent
+  // `.rv` section — staggering 40-60 rows would feel slow, not delightful.
+  function watchStagger(containerId, stepMs) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    if (reduced) return;
+    var mo = new MutationObserver(function () {
+      Array.prototype.forEach.call(container.children, function (child, i) {
+        child.classList.remove('rv-stagger-item');
+        void child.offsetWidth;
+        child.style.animationDelay = (i * stepMs) + 'ms';
+        child.classList.add('rv-stagger-item');
+      });
+    });
+    mo.observe(container, { childList: true });
+  }
+  watchStagger('planet-grid', 45);
+  watchStagger('history-list', 35);
+})();
+</script>
+
 </body>
 </html>
